@@ -3,6 +3,7 @@ date:
   created: 2025-12-06
   updated: 2025-12-30
 draft: false
+description: Complete beginner's guide to VHS tape digitization using vhs-decode and CX cards in Linux, covering hardware setup, soldering, driver installation, and first capture.
 
 ---
 

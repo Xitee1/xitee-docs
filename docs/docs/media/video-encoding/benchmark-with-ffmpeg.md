@@ -1,3 +1,7 @@
+---
+description: Simple ffmpeg benchmark test to compare video encoding speed across different machines using H.265/HEVC encoding.
+---
+
 # Benchmark with ffmpeg
 
 This simple test lets you compare how fast your machine is at encoding videos.

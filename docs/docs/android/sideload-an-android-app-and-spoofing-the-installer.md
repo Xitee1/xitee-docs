@@ -1,3 +1,7 @@
+---
+description: How to sideload Android apps and spoof the installer source using ADB to make apps appear as installed from Google Play Store, useful for Android Auto.
+---
+
 # Sideload an Android App and spoofing the installer
 
 When installing an Android app, the system keeps track of where it came from.

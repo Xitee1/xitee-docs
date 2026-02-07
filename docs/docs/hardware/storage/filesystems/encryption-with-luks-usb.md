@@ -1,3 +1,7 @@
+---
+description: Guide to setting up LUKS disk encryption with a USB stick as the unlock key, including automatic boot unlocking and LUKS header backups.
+---
+
 # Disk encryption with LUKS and using USB stick to unlock
 
 !!! danger "Danger!"

@@ -1,3 +1,7 @@
+---
+description: Complete guide to using iperf3 for network speed testing, including installation on Linux, macOS, Windows, FreeBSD, and setting up a systemd service.
+---
+
 # iperf3: Network speed tests
 
 iperf 3 is a useful tool that allows you to easily do (local) network speed tests between two computers.

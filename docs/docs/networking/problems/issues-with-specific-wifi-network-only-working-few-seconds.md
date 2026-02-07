@@ -1,3 +1,7 @@
+---
+description: Troubleshooting guide for Wi-Fi connectivity issues caused by Docker subnet conflicts, where the network works for a few seconds and then breaks repeatedly.
+---
+
 # Specific (Wi-Fi) Network works for few seconds, breaks, then works again for few seconds
 
 ## Story

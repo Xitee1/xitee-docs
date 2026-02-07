@@ -1,3 +1,7 @@
+---
+description: Examples of MkDocs Material syntax including admonitions, tabbed code blocks, collapsible sections, and syntax highlighting.
+---
+
 # MKDocs Syntax Examples
 
 ## Syntax testing

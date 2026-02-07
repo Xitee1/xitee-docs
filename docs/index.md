@@ -1,3 +1,7 @@
+---
+description: Personal documentation site with tutorials and guides about Linux, networking, hardware, Android, media encoding, and more.
+---
+
 # Welcome!
 Welcome to my new documentation page!
 

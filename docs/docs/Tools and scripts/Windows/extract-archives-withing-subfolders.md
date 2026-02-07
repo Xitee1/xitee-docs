@@ -1,3 +1,7 @@
+---
+description: PowerShell command to batch extract RAR archives across multiple subfolders using WinRAR on Windows.
+---
+
 # Extract archives within subfolders (WinRAR)
 
 Having a lot of archived, all in their own sub-folder?

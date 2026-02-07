@@ -1,3 +1,7 @@
+---
+description: Step-by-step guide to set up a Raspberry Pi as a web kiosk with auto-start, Chromium or Firefox in kiosk mode, and overlay filesystem for reliability.
+---
+
 # Set up Raspberry Pi as web kiosk
 
 ## Compatibility
