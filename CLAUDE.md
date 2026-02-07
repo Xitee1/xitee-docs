@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Workflow Rules
+
+- Never push to remote unless the user explicitly asks for it.
+
 ## Project Overview
 
 MkDocs Material documentation and blog site ("Xitee's Docs") served at https://docs.xitma.de. This is a Python-based project — there is no Node.js/npm involved.
