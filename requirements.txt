@@ -3,3 +3,4 @@ mkdocs-awesome-nav
 mkdocs-git-revision-date-localized-plugin
 mkdocs-glightbox
 click==8.2.1
+mkdocs-redirects
