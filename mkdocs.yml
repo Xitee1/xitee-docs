@@ -36,6 +36,10 @@ plugins:
       type: timeago
       fallback_to_build_date: false
       enable_creation_date: true
+  - redirects:
+      redirect_maps:
+        'mkdocs-syntax-examples/index.md': 'docs/mkdocs-syntax-examples/index.md'
+        'media/video-encoding/benchmark-with-ffmpeg/index.md': 'docs/media/video-encoding/benchmark-with-ffmpeg/index.md'
 
 markdown_extensions:
   - attr_list
