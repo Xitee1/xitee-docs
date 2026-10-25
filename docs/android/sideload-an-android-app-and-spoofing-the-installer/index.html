@@ -727,7 +727,7 @@
   <span class="md-ellipsis">
     
   
-    Storage
+    Raspberry pi
   
 
     
@@ -740,6 +740,92 @@
         
         <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Raspberry pi
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/raspberry-pi/raspberry-pi-network-boot-iscsi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi: Network boot with the root filesystem on iSCSI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_3" id="__nav_2_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -767,10 +853,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_2_1">
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3_1">
         
           
-          <label class="md-nav__link" for="__nav_2_3_2_1" id="__nav_2_3_2_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_3_3_1" id="__nav_2_3_3_1_label" tabindex="0">
             
   
   
@@ -788,8 +874,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_3_2_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_3_2_1">
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_3_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3_1">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1675,7 +1761,7 @@
   
 
 
-<h1 id="sideload-an-android-app-and-spoofing-the-installer">Sideload an Android App and spoofing the installer</h1>
+<h1 id="sideload-an-android-app-and-spoofing-the-installer">Sideload an Android App and spoofing the installer<a class="headerlink" href="#sideload-an-android-app-and-spoofing-the-installer" title="Permanent link">¶</a></h1>
 <p>When installing an Android app, the system keeps track of where it came from.
 For example, if you install an app from the Google Play Store, the app info will show something like "Installed from Google Play Store".
 Normally, it doesn't matter where the app came from, but in some cases like Android Auto, it does.</p>
@@ -1684,7 +1770,7 @@ This prevents you from using modded apps in AA (e.g. Spotify,...).</p>
 <p>You can enable developer mode in AA, but in my case, the apps from different sources do not always show up and I have to reconnect AA in hopes it will be there on the next try.
 With spoofing the installed app, it is way more consistent (however it's still missing sometimes) and you don't need to enable the developer mode.</p>
 <p>To do this, you just need to use the <code>-i</code> argument and define the package name of the installer app:
-</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>adb<span class="w"> </span>install<span class="w"> </span>-i<span class="w"> </span><span class="s2">"com.android.vending"</span><span class="w"> </span>-r<span class="w"> </span>.<span class="se">\p</span>ath<span class="se">\t</span>o<span class="se">\y</span>our.apk
+</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1">adb<span class="w"> </span>install<span class="w"> </span>-i<span class="w"> </span><span class="s2">"com.android.vending"</span><span class="w"> </span>-r<span class="w"> </span>.<span class="se">\p</span>ath<span class="se">\t</span>o<span class="se">\y</span>our.apk
 </span></code></pre></div><p></p>
 
 
@@ -1826,7 +1912,7 @@ With spoofing the installed app, it is way more consistent (however it's still m
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["search.highlight", "navigation.tabs"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["search.highlight", "navigation.tabs", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../../assets/javascripts/bundle.c21346df.min.js"></script>

@@ -715,7 +715,7 @@
   <span class="md-ellipsis">
     
   
-    Storage
+    Raspberry pi
   
 
     
@@ -728,6 +728,92 @@
         
         <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Raspberry pi
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../hardware/raspberry-pi/raspberry-pi-network-boot-iscsi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi: Network boot with the root filesystem on iSCSI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_3" id="__nav_2_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -755,10 +841,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_2_1">
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3_1">
         
           
-          <label class="md-nav__link" for="__nav_2_3_2_1" id="__nav_2_3_2_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_3_3_1" id="__nav_2_3_3_1_label" tabindex="0">
             
   
   
@@ -776,8 +862,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_3_2_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_3_2_1">
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_3_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3_1">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1766,8 +1852,8 @@
   
 
 
-<h1 id="specific-wi-fi-network-works-for-few-seconds-breaks-then-works-again-for-few-seconds">Specific (Wi-Fi) Network works for few seconds, breaks, then works again for few seconds</h1>
-<h2 id="story">Story</h2>
+<h1 id="specific-wi-fi-network-works-for-few-seconds-breaks-then-works-again-for-few-seconds">Specific (Wi-Fi) Network works for few seconds, breaks, then works again for few seconds<a class="headerlink" href="#specific-wi-fi-network-works-for-few-seconds-breaks-then-works-again-for-few-seconds" title="Permanent link">¶</a></h1>
+<h2 id="story">Story<a class="headerlink" href="#story" title="Permanent link">¶</a></h2>
 <p>So I had really weird network problems on one specific Wi-Fi network on my laptop running Kubuntu.</p>
 <p>The problem was that the network worked a few seconds after connecting, then stopped working for a few seconds and then
 come back for a few seconds, over and over again. Sometimes it would not recover though.
@@ -1777,21 +1863,21 @@ Because the network requires PEAP authentication, I thought that this would be t
 (especially because it worked on all other devices I had).</p>
 <p>But after trying all kinds of things, thinking it the network would block something or an authentication issue, the problem was rather simple.</p>
 <p>Turns out, Docker, which was running on my laptop, was the problem because it was using the same network range (127.x.x.x).</p>
-<h2 id="solution">Solution</h2>
+<h2 id="solution">Solution<a class="headerlink" href="#solution" title="Permanent link">¶</a></h2>
 <p>To verify that Docker was actually causing this issue, I have stopped it and deleted the network
 (will be recreated automatically when starting Docker again):
-</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>docker
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span>delete<span class="w"> </span>docker0
+</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1">sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>docker
+</span><span id="__span-0-2">sudo<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span>delete<span class="w"> </span>docker0
 </span></code></pre></div><p></p>
 <p>Directly after executing these commands, the network instantly worked flawlessly.
 To keep using Docker while on this network, we need to change the Docker subnet.</p>
 <p>Create/Modify this file and add this option:
-</p><div class="language-json highlight"><span class="filename">/etc/docker/daemon.json</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">"bip"</span><span class="p">:</span><span class="w"> </span><span class="s2">"192.168.100.1/24"</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">}</span>
+</p><div class="language-json highlight"><span class="filename">/etc/docker/daemon.json</span><pre><span></span><code><span id="__span-1-1"><span class="p">{</span>
+</span><span id="__span-1-2"><span class="w">  </span><span class="nt">"bip"</span><span class="p">:</span><span class="w"> </span><span class="s2">"192.168.100.1/24"</span>
+</span><span id="__span-1-3"><span class="p">}</span>
 </span></code></pre></div><p></p>
 <p>Then restart Docker:
-</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>docker
+</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1">sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>docker
 </span></code></pre></div><p></p>
 
 
@@ -1933,7 +2019,7 @@ To keep using Docker while on this network, we need to change the Docker subnet.
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["search.highlight", "navigation.tabs"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["search.highlight", "navigation.tabs", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>

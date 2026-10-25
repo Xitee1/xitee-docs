@@ -12,7 +12,7 @@
         <link rel="canonical" href="https://docs.xitma.de/docs/hardware/storage/filesystems/encryption-with-luks-usb/">
       
       
-        <link rel="prev" href="../../../kiosk/raspberry-pi-kiosk-webpage/">
+        <link rel="prev" href="../../../raspberry-pi/raspberry-pi-network-boot-iscsi/">
       
       
         <link rel="next" href="../../../../media/video-encoding/benchmark-with-ffmpeg/">
@@ -693,6 +693,92 @@
                 
   
   
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_2">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_2" id="__nav_2_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry pi
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Raspberry pi
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../raspberry-pi/raspberry-pi-network-boot-iscsi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi: Network boot with the root filesystem on iSCSI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -709,10 +795,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_2" checked="">
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3" checked="">
         
           
-          <label class="md-nav__link" for="__nav_2_3_2" id="__nav_2_3_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_3_3" id="__nav_2_3_3_label" tabindex="0">
             
   
   
@@ -730,8 +816,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_2_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2_3_2">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_3_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -761,10 +847,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_2_1" checked="">
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3_1" checked="">
         
           
-          <label class="md-nav__link" for="__nav_2_3_2_1" id="__nav_2_3_2_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_3_3_1" id="__nav_2_3_3_1_label" tabindex="0">
             
   
   
@@ -782,8 +868,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_3_2_1_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2_3_2_1">
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_3_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_3_3_1">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1856,52 +1942,52 @@
   
 
 
-<h1 id="disk-encryption-with-luks-and-using-usb-stick-to-unlock">Disk encryption with LUKS and using USB stick to unlock</h1>
+<h1 id="disk-encryption-with-luks-and-using-usb-stick-to-unlock">Disk encryption with LUKS and using USB stick to unlock<a class="headerlink" href="#disk-encryption-with-luks-and-using-usb-stick-to-unlock" title="Permanent link">¶</a></h1>
 <div class="admonition danger">
 <p class="admonition-title">Danger!</p>
 <p>Make sure to <strong>always</strong> replace <code>/dev/sdX</code> with the correct disk.
 Using the wrong path can and likely will cause data loss!</p>
 </div>
-<h3 id="creating-a-new-usb-key">Creating a new USB key</h3>
+<h3 id="creating-a-new-usb-key">Creating a new USB key<a class="headerlink" href="#creating-a-new-usb-key" title="Permanent link">¶</a></h3>
 <ol>
 <li>Execute <code>lsblk</code> and find the path of your usb drive (e.g. <code>/dev/sdb</code>)</li>
 <li>Make new label:
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>parted<span class="w"> </span>/dev/sdX<span class="w"> </span><span class="s2">"mklabel gpt"</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1">sudo<span class="w"> </span>parted<span class="w"> </span>/dev/sdX<span class="w"> </span><span class="s2">"mklabel gpt"</span>
 </span></code></pre></div>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>yes
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1">yes
 </span></code></pre></div></li>
 <li>Make partitions:
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>cfdisk<span class="w"> </span>/dev/sdX
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1">sudo<span class="w"> </span>cfdisk<span class="w"> </span>/dev/sdX
 </span></code></pre></div>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>new - enter
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>enter
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>type - enter
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    Linux Filesystem - enter
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>write - enter
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>yes - enter
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>quit - enter
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1">new - enter
+</span><span id="__span-3-2">enter
+</span><span id="__span-3-3">type - enter
+</span><span id="__span-3-4">    Linux Filesystem - enter
+</span><span id="__span-3-5">write - enter
+</span><span id="__span-3-6">yes - enter
+</span><span id="__span-3-7">quit - enter
 </span></code></pre></div></li>
 <li>Formatting:
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>sudo<span class="w"> </span>mkfs.ext4<span class="w"> </span>/dev/sdX
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1">sudo<span class="w"> </span>mkfs.ext4<span class="w"> </span>/dev/sdX
 </span></code></pre></div>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>y
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1">y
 </span></code></pre></div></li>
 <li>Generate key and write it to usb stick:
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sudo<span class="w"> </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/urandom<span class="w"> </span><span class="nv">of</span><span class="o">=</span>/dev/sdX<span class="w"> </span><span class="nv">bs</span><span class="o">=</span><span class="m">512</span><span class="w"> </span><span class="nv">seek</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">2046</span><span class="w"> </span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1">sudo<span class="w"> </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/urandom<span class="w"> </span><span class="nv">of</span><span class="o">=</span>/dev/sdX<span class="w"> </span><span class="nv">bs</span><span class="o">=</span><span class="m">512</span><span class="w"> </span><span class="nv">seek</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">2046</span><span class="w"> </span>
 </span></code></pre></div></li>
 <li>Proceed with <a href="#extracting-a-bin-key-file-from-usb-key">Extracting a bin key file from USB key</a> and then <a href="#adding-a-bin-key-file-to-a-disk">Adding a bin key file to a disk</a></li>
 </ol>
-<h3 id="extracting-a-bin-key-file-from-usb-key">Extracting a bin key file from USB key</h3>
+<h3 id="extracting-a-bin-key-file-from-usb-key">Extracting a bin key file from USB key<a class="headerlink" href="#extracting-a-bin-key-file-from-usb-key" title="Permanent link">¶</a></h3>
 <p><code>dd if=/dev/sdX bs=512 skip=1 count=16 of=recoveredKeyFile.bin</code></p>
-<h3 id="adding-a-bin-key-file-to-a-disk">Adding a bin key file to a disk</h3>
+<h3 id="adding-a-bin-key-file-to-a-disk">Adding a bin key file to a disk<a class="headerlink" href="#adding-a-bin-key-file-to-a-disk" title="Permanent link">¶</a></h3>
 <p><code>cryptsetup luksAddKey /dev/sdX keyFile.bin</code></p>
-<h3 id="automatic-unlocking-on-boot-by-plugging-in-usb-key-on-boot">Automatic unlocking on boot (by plugging in USB key on boot)</h3>
+<h3 id="automatic-unlocking-on-boot-by-plugging-in-usb-key-on-boot">Automatic unlocking on boot (by plugging in USB key on boot)<a class="headerlink" href="#automatic-unlocking-on-boot-by-plugging-in-usb-key-on-boot" title="Permanent link">¶</a></h3>
 <p>Configure crypttab (example, replace with your values, see table below):</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When having multiple disks, you must increment the <code>sda-crypt</code> alphabetically.</p>
 </div>
-<div class="language-text highlight"><span class="filename">/etc/crypttab</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sda-crypt UUID=65fc9547-361c-40dd-bf45-d26828c5ae0d /dev/disk/by-id/usb-Verbatim_STORE_N_GO_12073991000507-0:0 luks,tries=3,keyfile-size=8192,keyfile-offset=512
+<div class="language-text highlight"><span class="filename">/etc/crypttab</span><pre><span></span><code><span id="__span-7-1">sda-crypt UUID=65fc9547-361c-40dd-bf45-d26828c5ae0d /dev/disk/by-id/usb-Verbatim_STORE_N_GO_12073991000507-0:0 luks,tries=3,keyfile-size=8192,keyfile-offset=512
 </span></code></pre></div>
 <table>
 <thead>
@@ -1921,9 +2007,9 @@ Using the wrong path can and likely will cause data loss!</p>
 </tr>
 </tbody>
 </table>
-<h2 id="backup-luks-header">Backup LUKS header</h2>
+<h2 id="backup-luks-header">Backup LUKS header<a class="headerlink" href="#backup-luks-header" title="Permanent link">¶</a></h2>
 <p><code>cryptsetup luksHeaderBackup /dev/sdX --header-backup-file DATA_HDD_2.luks.bin</code></p>
-<h2 id="sources">Sources</h2>
+<h2 id="sources">Sources<a class="headerlink" href="#sources" title="Permanent link">¶</a></h2>
 <ul>
 <li><a href="https://knilix.home.blog/luks-encryption/">https://knilix.home.blog/luks-encryption/</a> (german)</li>
 </ul>
@@ -2067,7 +2153,7 @@ Using the wrong path can and likely will cause data loss!</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["search.highlight", "navigation.tabs"], "search": "../../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["search.highlight", "navigation.tabs", "content.code.copy"], "search": "../../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../../../../assets/javascripts/bundle.c21346df.min.js"></script>

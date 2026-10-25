@@ -710,7 +710,7 @@
   <span class="md-ellipsis">
     
   
-    Storage
+    Raspberry pi
   
 
     
@@ -723,6 +723,92 @@
         
         <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Raspberry pi
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/hardware/raspberry-pi/raspberry-pi-network-boot-iscsi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi: Network boot with the root filesystem on iSCSI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_3" id="__nav_2_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -750,10 +836,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_2_1">
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3_1">
         
           
-          <label class="md-nav__link" for="__nav_2_3_2_1" id="__nav_2_3_2_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_3_3_1" id="__nav_2_3_3_1_label" tabindex="0">
             
   
   
@@ -771,8 +857,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_3_2_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_3_2_1">
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_3_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3_1">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2077,24 +2163,24 @@
   
 
 
-<h1 id="vhs-decode-part-1">VHS-Decode - Part 1</h1>
+<h1 id="vhs-decode-part-1">VHS-Decode - Part 1<a class="headerlink" href="#vhs-decode-part-1" title="Permanent link">¶</a></h1>
 <p><strong>This tutorial is exclusively for capturing VHS tapes</strong></p>
 <p>This tutorial (or rather blog) shows you start to end on how to do your very first video-only capture with vhs-decode in Linux.
 Capturing audio and improving the quality will come in later parts of this blog (if I manage to understand it :laught:).
 It's meant for absolute beginners, although it's assumed that you have some basic technical understanding + skills and know how to use the terminal in Linux.</p>
-<h2 id="requirements">Requirements</h2>
-<h3 id="skills">Skills</h3>
+<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">¶</a></h2>
+<h3 id="skills">Skills<a class="headerlink" href="#skills" title="Permanent link">¶</a></h3>
 <ul>
 <li>Basic soldering skills</li>
 <li>Basic Linux &amp; Terminal understanding (includes knowing common commands, e.g. changing directory, moving files, ...)</li>
 </ul>
-<h3 id="main-parts">Main parts</h3>
+<h3 id="main-parts">Main parts<a class="headerlink" href="#main-parts" title="Permanent link">¶</a></h3>
 <ul>
 <li>PC with two spare PCIe slots and Linux as OS: For beginners preferred Linux Mint or at least Debian based (Linux Mint is based on Ubuntu which is based on Debian), most other distros work too, but in that case you should really know your distro.</li>
 <li>VCR (<strong>V</strong>ideo <strong>C</strong>assette <strong>R</strong>ecorder) (your VHS player)</li>
 <li>Optional: TV/Monitor for the VCR (just for viewing the tape during capture)</li>
 </ul>
-<h3 id="miscellaneous-parts-for-vhs-decode">Miscellaneous parts for vhs-decode</h3>
+<h3 id="miscellaneous-parts-for-vhs-decode">Miscellaneous parts for vhs-decode<a class="headerlink" href="#miscellaneous-parts-for-vhs-decode" title="Permanent link">¶</a></h3>
 <ul>
 <li>
 <p>Soldering iron and belonging tools</p>
@@ -2130,13 +2216,13 @@ It's meant for absolute beginners, although it's assumed that you have some basi
 <p>To make it clear if you're a bit overwhelmed with all the connectors: These are really only for convenience. Theoretically, just a long enough bare coaxial cable would be enough, the connectors are just for convenience to allow you unplugging it and integrating the amplifier (you don't need to know about the amplifier yet).</p>
 <p>For all the cables you should get ones with 50 Ohm (usually specified in the product title or description).</p>
 <p>For the length, you should just measure how much you need and order ones as short as possible to avoid interference. But don't use too short ones to avoid wiring problems later on.</p>
-<h2 id="start">Start</h2>
+<h2 id="start">Start<a class="headerlink" href="#start" title="Permanent link">¶</a></h2>
 <p>Okay, so let's start.
 If you're reading this and haven't ordered your parts yet or you currently wait for them to arrive, keep on reading to get a better understanding of how it works. It'll help reading this (and the official vhs-decode wiki) multiple times, with some time between. You can also do some preparation already.</p>
 <p>First, find a place to put your VCR and (preferred dedicated) capture PC.</p>
 <p>Take a note of your VCR model name.
 Remove the cover from your VCR (most of the time the screws are on the sides and back).</p>
-<h4 id="finding-the-test-point">Finding the test point</h4>
+<h4 id="finding-the-test-point">Finding the test point<a class="headerlink" href="#finding-the-test-point" title="Permanent link">¶</a></h4>
 <p>For finding the test points, you should follow the official WIKI. As said, in the first step we're only going to capture video so we just need to find the video test point, although it won't hurt searching for the audio test point too. Note that if your VCR does not have Hi-Fi audio support (most of the time it's written on the tape cover on the front of your VCR), you won't find a audio test point because this test point is ONLY for capturing the Hi-Fi (better quality) audio. Not all VCRs support that and not all tapes have Hi-Fi audio in the first place. That means if your tape doesn't have Hi-Fi audio the Hi-Fi test point will be completely useless even if your VCR has one. In that case you'll need to capture the standard way with the standard audio output at the back of the VCR.</p>
 <p>VHS-Decode links for finding test points:</p>
 <ul>
@@ -2154,7 +2240,7 @@ After opening it up and removing the whole tape unit, I saw another model number
 All I want to say with this is, it's very likely that your service manual is somewhere out there, you just need to hunt it down.</p>
 <p>If you still can't find the test point with the service manual, someone at the vhs-decode subreddit or on the Discord server may be able to help you.
 But if ask there, you should have your service manual ready to get the best help.</p>
-<h4 id="wiring">Wiring</h4>
+<h4 id="wiring">Wiring<a class="headerlink" href="#wiring" title="Permanent link">¶</a></h4>
 <p>You've found your test point.
 <em>If you didn't find it yet, you can skip to <a href="#cx-cards">CX Cards</a></em></p>
 <p>Get the SMA male cable with no connector on the other end. Solder that end to the capacitor.
@@ -2165,7 +2251,7 @@ You can also prepare the other cable for Hi-Fi audio capture.</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../vhs-digitizing/images/first-cable-tap-in-vcr-close.jpg" data-desc-position="bottom"><img alt="Cable tap in VCR - Close view" src="../../../../vhs-digitizing/images/first-cable-tap-in-vcr-close.jpg"></a></p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../vhs-digitizing/images/first-cable-tap-in-vcr-overview.jpg" data-desc-position="bottom"><img alt="Cable tap in VCR - Overview" src="../../../../vhs-digitizing/images/first-cable-tap-in-vcr-overview.jpg"></a></p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../vhs-digitizing/images/first-cable-from-vcr.jpg" data-desc-position="bottom"><img alt="Cable from VCR" src="../../../../vhs-digitizing/images/first-cable-from-vcr.jpg"></a></p>
-<h4 id="cx-cards">CX Cards</h4>
+<h4 id="cx-cards">CX Cards<a class="headerlink" href="#cx-cards" title="Permanent link">¶</a></h4>
 <p>First find out what model you've got and if it's good: <a href="https://github.com/happycube/cxadc-linux3/wiki/Types-Of-CX2388x-Cards">Types Of CX2388x Cards · happycube/cxadc-linux3 Wiki</a>.
 The exact model is written on the big chip on the card.
 They even ship different models if you order multiple at once. For me, one had the CX23883 and the other the CX25800 chip.
@@ -2184,93 +2270,93 @@ After having the BNC connector installed, do the C31 removal (or move it to the 
 <p>Because I will do the clockgen mod later anyway (which I really recommend to avoid sync issues) and just want to see if it's working at all right now, I'm not going to do the crystal replacement mod.</p>
 <p>After your card is ready, install it to your capturing PC.</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../vhs-digitizing/images/cx-card-1-in-pc.jpg" data-desc-position="bottom"><img alt="CX Card installed in PC" src="../../../../vhs-digitizing/images/cx-card-1-in-pc.jpg"></a></p>
-<h2 id="the-software-part">The software part</h2>
-<h3 id="cx-card-driver">CX card driver</h3>
-<h4 id="checking-if-the-card-is-recognized">Checking if the card is recognized</h4>
+<h2 id="the-software-part">The software part<a class="headerlink" href="#the-software-part" title="Permanent link">¶</a></h2>
+<h3 id="cx-card-driver">CX card driver<a class="headerlink" href="#cx-card-driver" title="Permanent link">¶</a></h3>
+<h4 id="checking-if-the-card-is-recognized">Checking if the card is recognized<a class="headerlink" href="#checking-if-the-card-is-recognized" title="Permanent link">¶</a></h4>
 <p>After installing the driver, the card should be there as <code>/dev/cxadc0</code>.
 You can check this with this command:
 <code>ls /dev/cxadc0</code>
 If it returns the path, your card is properly recognized! If it says the path cannot be found, something went wrong.</p>
-<h4 id="installing-the-driver">Installing the driver</h4>
+<h4 id="installing-the-driver">Installing the driver<a class="headerlink" href="#installing-the-driver" title="Permanent link">¶</a></h4>
 <p>For installing the driver, follow the instructions of the driver's README: <a href="https://github.com/happycube/cxadc-linux3?tab=readme-ov-file#getting-started--installation">GitHub - happycube/cxadc-linux3</a></p>
 <p>First you must install the dependencies, download the repo to your local disk and then build it. After that, reboot and check if the card is recognized.</p>
 <p>For installing the dependencies, If you're using a different repo than what's listed there (currently only Ubuntu 22.04 or RPi OS),  AI can help relatively good with getting the dependencies that you need to install on your distro.
 In my case I've use openSUSE. Although it worked for me, I recommend just using a distro (currently Ubuntu) that's supported by the official WIKI if you use a dedicated PC.</p>
-<h4 id="connecting-the-cables">Connecting the cables</h4>
+<h4 id="connecting-the-cables">Connecting the cables<a class="headerlink" href="#connecting-the-cables" title="Permanent link">¶</a></h4>
 <p>Now after the driver is working, it's a good time to connect the cable with the BNC plug from your VCR to the CX card.</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../vhs-digitizing/images/first-cable-connected-to-cx-card.jpg" data-desc-position="bottom"><img alt="First cable connected to CX card" src="../../../../vhs-digitizing/images/first-cable-connected-to-cx-card.jpg"></a></p>
-<h4 id="find-the-correct-vmux-input">Find the correct <code>vmux</code> input</h4>
+<h4 id="find-the-correct-vmux-input">Find the correct <code>vmux</code> input<a class="headerlink" href="#find-the-correct-vmux-input" title="Permanent link">¶</a></h4>
 <p>The CX cards have 3 inputs, depending on your card and which of the two RCA inputs you've used, you need to find the correct output.</p>
 <p>For finding the correct <code>vmuc</code> input, check this wiki: <a href="https://github.com/happycube/cxadc-linux3/wiki/Types-Of-CX2388x-Cards">Types Of CX2388x Cards · happycube/cxadc-linux3 Wiki</a></p>
 <p>To configure the correct <code>vmux</code> input, you must execute this command:
 <code>echo 1 &gt;/sys/class/cxadc/cxadc0/device/parameters/vmux</code>
 Replace the number after <code>echo</code> with the input you want to use.
 This is explained here as an example: <a href="https://github.com/happycube/cxadc-linux3?tab=readme-ov-file#module-parameters">https://github.com/happycube/cxadc-linux3?tab=readme-ov-file#module-parameters</a></p>
-<h4 id="driver-setup">Driver setup</h4>
+<h4 id="driver-setup">Driver setup<a class="headerlink" href="#driver-setup" title="Permanent link">¶</a></h4>
 <p>You should read trough the driver's README to get an overview of all the things you that you can adjust. I'm not fully sure (because I played around with it because I had no signal at all at first (but at the end the issue was something else, see troubleshooting below)), but I think it's not needed and is only fine adjusting.</p>
-<h3 id="testing-the-signal">Testing the signal</h3>
+<h3 id="testing-the-signal">Testing the signal<a class="headerlink" href="#testing-the-signal" title="Permanent link">¶</a></h3>
 <p>After successfully installing the driver, we can now finally test if we receive a signal from our VCR.
 For this, we use ffplay: <a href="https://github.com/happycube/cxadc-linux3?tab=readme-ov-file#commands-to-check-for-signal-burst">https://github.com/happycube/cxadc-linux3?tab=readme-ov-file#commands-to-check-for-signal-burst</a></p>
-<h3 id="making-the-first-capture">Making the first capture</h3>
-<h4 id="folder-structure">Folder structure</h4>
+<h3 id="making-the-first-capture">Making the first capture<a class="headerlink" href="#making-the-first-capture" title="Permanent link">¶</a></h3>
+<h4 id="folder-structure">Folder structure<a class="headerlink" href="#folder-structure" title="Permanent link">¶</a></h4>
 <p>For initial testing, a relatively small disk is okay. But for doing longer captures, you'll need a lot of storage space.
 For testing, I just made a folder in my home directory.
 My folder structure as example:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>workdir
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  captures
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    some-capture.u8
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  decoded
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    some-capture.tbc
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    some-capture_chroma.tbc
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    some-capture.json
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    some-capture.log
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  export
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    some-capture.mkv
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  tools
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1">workdir
+</span><span id="__span-0-2">  captures
+</span><span id="__span-0-3">    some-capture.u8
+</span><span id="__span-0-4">  decoded
+</span><span id="__span-0-5">    some-capture.tbc
+</span><span id="__span-0-6">    some-capture_chroma.tbc
+</span><span id="__span-0-7">    some-capture.json
+</span><span id="__span-0-8">    some-capture.log
+</span><span id="__span-0-9">  export
+</span><span id="__span-0-10">    some-capture.mkv
+</span><span id="__span-0-11">  tools
 </span></code></pre></div>
-<h4 id="getting-required-software">Getting required software</h4>
+<h4 id="getting-required-software">Getting required software<a class="headerlink" href="#getting-required-software" title="Permanent link">¶</a></h4>
 <p>Download the <code>tbc-tools</code> archive and the <code>vhs-decode</code> AppImage from: <a href="https://github.com/oyvindln/vhs-decode/releases/">Releases · oyvindln/vhs-decode · GitHub</a>.
 Extract the tbc-tools archive into your tools folder. Also place your AppImage there.</p>
 <p>Download the <code>tbc-video-export</code> AppImage from: <a href="https://github.com/JuniorIsAJitterbug/tbc-video-export/releases">Releases · JuniorIsAJitterbug/tbc-video-export · GitHub</a></p>
 <p>Example:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>.
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>└── workdir/
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    └── tools/
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>        ├── tbc-tools/
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        │   ├── 40msps-to-10msps-8-bit-HiFi.sh
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        │   ├── ld-compress
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        │   ├── tbc-tools-x86_64.AppImage
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>        │   └── ...
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        ├── vhs-decode-x86_64.AppImage
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        └── tbc-video-export-v0.1.8-amd64.AppImage 
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1">.
+</span><span id="__span-1-2">└── workdir/
+</span><span id="__span-1-3">    └── tools/
+</span><span id="__span-1-4">        ├── tbc-tools/
+</span><span id="__span-1-5">        │   ├── 40msps-to-10msps-8-bit-HiFi.sh
+</span><span id="__span-1-6">        │   ├── ld-compress
+</span><span id="__span-1-7">        │   ├── tbc-tools-x86_64.AppImage
+</span><span id="__span-1-8">        │   └── ...
+</span><span id="__span-1-9">        ├── vhs-decode-x86_64.AppImage
+</span><span id="__span-1-10">        └── tbc-video-export-v0.1.8-amd64.AppImage 
 </span></code></pre></div>
-<h4 id="capturing">Capturing</h4>
+<h4 id="capturing">Capturing<a class="headerlink" href="#capturing" title="Permanent link">¶</a></h4>
 <p>To capture a 10 seconds clip, execute this command (execute inside of your captures folder):
 <code>timeout 10s cat /dev/cxadc0 |pv &gt; captures/CX_Card_28msps_8-bit.u8</code></p>
 <p>With that, you receive your capture in this file: <code>CX_Card_28msps_8-bit.u8</code></p>
-<h4 id="decoding">Decoding</h4>
+<h4 id="decoding">Decoding<a class="headerlink" href="#decoding" title="Permanent link">¶</a></h4>
 <p>After getting the <code>.u8</code> file, we can now decode it.
 In my case the command is:
 <code>tools/vhs-decode-x86_64.AppImage vhs --debug --tape_format vhs --system pal --cxadc --threads 8 --recheck_phase captures/CX_Card_28msps_8-bit.u8 decoded/CX_Card_28msps_8-bit</code></p>
 <p>For more information, see here: <a href="https://github.com/oyvindln/vhs-decode/wiki/RF-Capture-Decoding-Guide#running-the-decoders">RF Capture Decoding Guide · oyvindln/vhs-decode Wiki · GitHub</a></p>
 <p>Note that the output path does not have a file ending. That's because it will actually create multiple output files.</p>
-<h3 id="analysing">Analysing</h3>
+<h3 id="analysing">Analysing<a class="headerlink" href="#analysing" title="Permanent link">¶</a></h3>
 <p>Now that we have our <code>.tbc</code> files, we can analyse them by starting <code>ld-analyse</code> (this opens a GUI, it will throw an error if you're doing it over SSH):
 <code>tools/tbc-tools/tbc-tools-x86_64.AppImage decoded/CX_Card_28msps_8-bit.tbc</code></p>
 <p>Hint: If it's only black &amp; white, press the <code>Source</code> button in the bottom right menu bar to switch to chroma mode</p>
-<h4 id="exporting">Exporting</h4>
+<h4 id="exporting">Exporting<a class="headerlink" href="#exporting" title="Permanent link">¶</a></h4>
 <p>Run the export command: <code>tools/tbc-video-export.AppImage --tbc-tools-appimage tools/tbc-tools/tbc-tools-x86_64.AppImage decoded/tape-2025-12-06.01.tbc</code></p>
 <p>Move the exported file to the export folder:<code>mv decoded/*.mkv export</code></p>
-<h4 id="finished">Finished!</h4>
+<h4 id="finished">Finished!<a class="headerlink" href="#finished" title="Permanent link">¶</a></h4>
 <p>You can now watch your <code>.mkv</code> file!
 But as explained at the beginning, we don't have any audio yet and the quality can probably be improved by tuning hardware &amp; software.</p>
 <p>Although it isn't needed yet in the testing stage, I still want to mention that you can use tools like <code>Handbrake</code> to encode your <code>.mkv</code> file to make it smaller (depending on the settings you'll lose quality the more you compress it at the reward of disk space).</p>
-<h2 id="troubleshooting">Troubleshooting</h2>
-<h3 id="very-bad-results">Very bad results</h3>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h3 id="very-bad-results">Very bad results<a class="headerlink" href="#very-bad-results" title="Permanent link">¶</a></h3>
 <p>When I tried to preview the signal with ffplay and did my first capture, the results were very bad (unusable).
 But I've just made the very dumb mistake that I did not ground it properly. I just soldered the cable to the video test point but did not solder to the shielding. I'm actually surprised that it worked at all and that it not went up in smokes.
 To ground it properly, just solder the cable's shielding to some metal inside the VCR. In my case I've used the metal box of the TV signal in/output, you can see the yellow cable in my wiring images above.</p>
-<h3 id="no-signal-at-all-ffplay-shows-no-noise">No signal at all / ffplay shows no noise</h3>
+<h3 id="no-signal-at-all-ffplay-shows-no-noise">No signal at all / ffplay shows no noise<a class="headerlink" href="#no-signal-at-all-ffplay-shows-no-noise" title="Permanent link">¶</a></h3>
 <p><em>Note: If you've got a good connection and no tape is playing, it's normal that there is no noise.</em></p>
 <p>I've had a really weird issue that after powering on / rebooting the PC, there is just no signal at all. No noise. Nothing.
 Accidentally I found how to make it work: I need to put the PC to sleep (suspend) and then wake it up again. After that, the card works.</p>
@@ -2417,7 +2503,7 @@ Accidentally I found how to make it work: I need to put the PC to sleep (suspend
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["search.highlight", "navigation.tabs"], "search": "../../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["search.highlight", "navigation.tabs", "content.code.copy"], "search": "../../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../../../../assets/javascripts/bundle.c21346df.min.js"></script>

@@ -15,7 +15,7 @@
         <link rel="prev" href="../../../android/sideload-an-android-app-and-spoofing-the-installer/">
       
       
-        <link rel="next" href="../../storage/filesystems/encryption-with-luks-usb/">
+        <link rel="next" href="../../raspberry-pi/raspberry-pi-network-boot-iscsi/">
       
       
         
@@ -938,7 +938,7 @@
   <span class="md-ellipsis">
     
   
-    Storage
+    Raspberry pi
   
 
     
@@ -951,6 +951,92 @@
         
         <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Raspberry pi
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../raspberry-pi/raspberry-pi-network-boot-iscsi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi: Network boot with the root filesystem on iSCSI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_3" id="__nav_2_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -978,10 +1064,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_2_1">
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3_1">
         
           
-          <label class="md-nav__link" for="__nav_2_3_2_1" id="__nav_2_3_2_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_3_3_1" id="__nav_2_3_3_1_label" tabindex="0">
             
   
   
@@ -999,8 +1085,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_3_2_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_3_2_1">
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_3_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3_1">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2066,12 +2152,12 @@
   
 
 
-<h1 id="set-up-raspberry-pi-as-web-kiosk">Set up Raspberry Pi as web kiosk</h1>
-<h2 id="compatibility">Compatibility</h2>
+<h1 id="set-up-raspberry-pi-as-web-kiosk">Set up Raspberry Pi as web kiosk<a class="headerlink" href="#set-up-raspberry-pi-as-web-kiosk" title="Permanent link">¶</a></h1>
+<h2 id="compatibility">Compatibility<a class="headerlink" href="#compatibility" title="Permanent link">¶</a></h2>
 <p>These instrutions haven't been fully tested from start to end because they were created after I set up the two kiosks I currently have.
 It should work with any recent Raspberry Pi OS (e.g. 12) though.
 Let me know if there's a issue somewhere in these instructions.</p>
-<h2 id="preparations">Preparations</h2>
+<h2 id="preparations">Preparations<a class="headerlink" href="#preparations" title="Permanent link">¶</a></h2>
 <ul>
 <li>Install the headless RPi OS (if you need to use the desktop variant for some reason, configure it to boot to console)</li>
 <li>Make sure auto-login is enabled:<ul>
@@ -2081,13 +2167,13 @@ Let me know if there's a issue somewhere in these instructions.</p>
 <li>Make sure <code>openbox</code> is installed</li>
 <li>Make sure <code>unclutter</code> is installed (optional, can be commented out in the script below)</li>
 </ul>
-<h2 id="display-browser-setup">Display &amp; Browser setup</h2>
+<h2 id="display-browser-setup">Display &amp; Browser setup<a class="headerlink" href="#display-browser-setup" title="Permanent link">¶</a></h2>
 <ol>
 <li>
 <p>Create/modify the file <code>/home/pi/.xinitrc</code>and add:
-</p><div class="language-text highlight"><span class="filename">/home/pi/.xinitrc</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>#!/bin/bash
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>openbox-session &amp;
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>exec /home/pi/kiosk.sh
+</p><div class="language-text highlight"><span class="filename">/home/pi/.xinitrc</span><pre><span></span><code><span id="__span-0-1">#!/bin/bash
+</span><span id="__span-0-2">openbox-session &amp;
+</span><span id="__span-0-3">exec /home/pi/kiosk.sh
 </span></code></pre></div><p></p>
 </li>
 <li>
@@ -2095,7 +2181,7 @@ Let me know if there's a issue somewhere in these instructions.</p>
 </li>
 <li>
 <p>Create/modify the file <code>/home/pi/.bash_profile</code> and add:
-</p><div class="language-text highlight"><span class="filename">/home/pi/.bash_profile</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>[[ -z $DISPLAY &amp;&amp; $XDG_VTNR -eq 1 ]] &amp;&amp; startx -- -nocursor
+</p><div class="language-text highlight"><span class="filename">/home/pi/.bash_profile</span><pre><span></span><code><span id="__span-1-1">[[ -z $DISPLAY &amp;&amp; $XDG_VTNR -eq 1 ]] &amp;&amp; startx -- -nocursor
 </span></code></pre></div><p></p>
 </li>
 <li>
@@ -2103,69 +2189,69 @@ Let me know if there's a issue somewhere in these instructions.</p>
 </li>
 <li>
 <p>Create the file <code>/home/pi/kiosk.sh</code> and add:
-</p><div class="language-bash highlight"><table class="highlighttable"><tbody><tr><th colspan="2" class="filename"><span class="filename">/home/pi/kiosk.sh</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-2-10">10</a></span>
-<span class="normal"><a href="#__codelineno-2-11">11</a></span>
-<span class="normal"><a href="#__codelineno-2-12">12</a></span>
-<span class="normal"><a href="#__codelineno-2-13">13</a></span>
-<span class="normal"><a href="#__codelineno-2-14">14</a></span>
-<span class="normal"><a href="#__codelineno-2-15">15</a></span>
-<span class="normal"><a href="#__codelineno-2-16">16</a></span>
-<span class="normal"><a href="#__codelineno-2-17">17</a></span>
-<span class="normal"><a href="#__codelineno-2-18">18</a></span>
-<span class="normal"><a href="#__codelineno-2-19">19</a></span>
-<span class="normal"><a href="#__codelineno-2-20">20</a></span>
-<span class="normal"><a href="#__codelineno-2-21">21</a></span>
-<span class="normal"><a href="#__codelineno-2-22">22</a></span>
-<span class="normal"><a href="#__codelineno-2-23">23</a></span>
-<span class="normal"><a href="#__codelineno-2-24">24</a></span>
-<span class="normal"><a href="#__codelineno-2-25">25</a></span>
-<span class="normal"><a href="#__codelineno-2-26">26</a></span>
-<span class="normal"><a href="#__codelineno-2-27">27</a></span>
-<span class="normal"><a href="#__codelineno-2-28">28</a></span>
-<span class="normal"><a href="#__codelineno-2-29">29</a></span>
-<span class="normal"><a href="#__codelineno-2-30">30</a></span>
-<span class="normal"><a href="#__codelineno-2-31">31</a></span>
-<span class="normal"><a href="#__codelineno-2-32">32</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="ch">#!/bin/bash</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="nv">URL</span><span class="o">=</span><span class="s2">"http://homeassistant.local"</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="nv">CHROMIUM_PREFERENCES_FILE</span><span class="o">=</span><span class="s2">"/home/</span><span class="nv">$USER</span><span class="s2">/.config/chromium/Default/Preferences"</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="c1"># Remove mouse cursor (optional)</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7"></a>unclutter<span class="w"> </span>-idle<span class="w"> </span><span class="m">5</span><span class="w"> </span>-root<span class="w"> </span><span class="p">&amp;</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8"></a>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="c1"># Disable screensavers (if they are enabled by default)</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10"></a>xset<span class="w"> </span>-dpms
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11"></a>xset<span class="w"> </span>s<span class="w"> </span>off
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12"></a>xset<span class="w"> </span>s<span class="w"> </span>noblank
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13"></a>
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="c1"># Prevent Chromium addons from automatically updating (which may open a new tab which is then displayed instead of our kiosk page)</span>
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">'s|"update_url":"https://clients2.google.com/service/update2/crx"|"update_url":"https://localhost"|'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CHROMIUM_PREFERENCES_FILE</span><span class="s2">"</span>
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16"></a>
-</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17"></a><span class="c1"># Remove warning popups in Chrome</span>
-</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">'s/"exited_cleanly":false/"exited_cleanly":true/'</span><span class="w"> </span>/home/<span class="nv">$USER</span>/.config/chromium/Default/Preferences
-</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">'s/"exit_type":"Crashed"/"exit_type":"Normal"/'</span><span class="w"> </span>/home/<span class="nv">$USER</span>/.config/chromium/Default/Preferences
-</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20"></a>
-</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21"></a><span class="c1">####################################################################################</span>
-</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22"></a><span class="c1">## Choose your browser by uncommenting either "chromium-browser" or "firefox-esr" ##</span>
-</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23"></a><span class="c1">####################################################################################</span>
-</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24"></a>
-</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25"></a><span class="c1"># Launch chromium browser</span>
-</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26"></a><span class="c1">#chromium-browser --noerrdialogs --disable-infobars --kiosk "$URL"</span>
-</span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27"></a>
-</span><span id="__span-2-28"><a id="__codelineno-2-28" name="__codelineno-2-28"></a><span class="c1"># Some more chrome flags that can be used:</span>
-</span><span id="__span-2-29"><a id="__codelineno-2-29" name="__codelineno-2-29"></a><span class="c1"># --hide-scrollbars</span>
-</span><span id="__span-2-30"><a id="__codelineno-2-30" name="__codelineno-2-30"></a>
-</span><span id="__span-2-31"><a id="__codelineno-2-31" name="__codelineno-2-31"></a><span class="c1"># Launch Firefox</span>
-</span><span id="__span-2-32"><a id="__codelineno-2-32" name="__codelineno-2-32"></a><span class="c1">#firefox-esr --kiosk "$URL"</span>
+</p><div class="language-bash highlight"><table class="highlighttable"><tbody><tr><th colspan="2" class="filename"><span class="filename">/home/pi/kiosk.sh</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><span class="ch">#!/bin/bash</span>
+</span><span id="__span-2-2">
+</span><span id="__span-2-3"><span class="nv">URL</span><span class="o">=</span><span class="s2">"http://homeassistant.local"</span>
+</span><span id="__span-2-4"><span class="nv">CHROMIUM_PREFERENCES_FILE</span><span class="o">=</span><span class="s2">"/home/</span><span class="nv">$USER</span><span class="s2">/.config/chromium/Default/Preferences"</span>
+</span><span id="__span-2-5">
+</span><span id="__span-2-6"><span class="c1"># Remove mouse cursor (optional)</span>
+</span><span id="__span-2-7">unclutter<span class="w"> </span>-idle<span class="w"> </span><span class="m">5</span><span class="w"> </span>-root<span class="w"> </span><span class="p">&amp;</span>
+</span><span id="__span-2-8">
+</span><span id="__span-2-9"><span class="c1"># Disable screensavers (if they are enabled by default)</span>
+</span><span id="__span-2-10">xset<span class="w"> </span>-dpms
+</span><span id="__span-2-11">xset<span class="w"> </span>s<span class="w"> </span>off
+</span><span id="__span-2-12">xset<span class="w"> </span>s<span class="w"> </span>noblank
+</span><span id="__span-2-13">
+</span><span id="__span-2-14"><span class="c1"># Prevent Chromium addons from automatically updating (which may open a new tab which is then displayed instead of our kiosk page)</span>
+</span><span id="__span-2-15">sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">'s|"update_url":"https://clients2.google.com/service/update2/crx"|"update_url":"https://localhost"|'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CHROMIUM_PREFERENCES_FILE</span><span class="s2">"</span>
+</span><span id="__span-2-16">
+</span><span id="__span-2-17"><span class="c1"># Remove warning popups in Chrome</span>
+</span><span id="__span-2-18">sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">'s/"exited_cleanly":false/"exited_cleanly":true/'</span><span class="w"> </span>/home/<span class="nv">$USER</span>/.config/chromium/Default/Preferences
+</span><span id="__span-2-19">sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">'s/"exit_type":"Crashed"/"exit_type":"Normal"/'</span><span class="w"> </span>/home/<span class="nv">$USER</span>/.config/chromium/Default/Preferences
+</span><span id="__span-2-20">
+</span><span id="__span-2-21"><span class="c1">####################################################################################</span>
+</span><span id="__span-2-22"><span class="c1">## Choose your browser by uncommenting either "chromium-browser" or "firefox-esr" ##</span>
+</span><span id="__span-2-23"><span class="c1">####################################################################################</span>
+</span><span id="__span-2-24">
+</span><span id="__span-2-25"><span class="c1"># Launch chromium browser</span>
+</span><span id="__span-2-26"><span class="c1">#chromium-browser --noerrdialogs --disable-infobars --kiosk "$URL"</span>
+</span><span id="__span-2-27">
+</span><span id="__span-2-28"><span class="c1"># Some more chrome flags that can be used:</span>
+</span><span id="__span-2-29"><span class="c1"># --hide-scrollbars</span>
+</span><span id="__span-2-30">
+</span><span id="__span-2-31"><span class="c1"># Launch Firefox</span>
+</span><span id="__span-2-32"><span class="c1">#firefox-esr --kiosk "$URL"</span>
 </span></code></pre></div></td></tr></tbody></table></div><p></p>
 </li>
 <li>
@@ -2173,15 +2259,15 @@ Let me know if there's a issue somewhere in these instructions.</p>
 </li>
 <li>Reboot. The kiosk should automatically start on the next boot.</li>
 </ol>
-<h2 id="custom-browser-scripts">Custom browser scripts</h2>
+<h2 id="custom-browser-scripts">Custom browser scripts<a class="headerlink" href="#custom-browser-scripts" title="Permanent link">¶</a></h2>
 <p>You can use the browser extension <a href="https://www.tampermonkey.net/">Tampermonkey</a> for writing custom browser scripts.
 With such a script, you can e.g. automatically fill in form fields and click buttons, very useful if you need to log in somewhere.</p>
 <p>In some cases, such a script will not work after rebooting because the browser window may not be focused properly. In that case it can help to (virtually) press a key.</p>
 <ol>
 <li>
 <p>Create a new script, e.g. <code>/home/pi/press-key.sh</code>
-</p><div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>#!/bin/bash
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>xdotool key F2
+</p><div class="language-text highlight"><pre><span></span><code><span id="__span-3-1">#!/bin/bash
+</span><span id="__span-3-2">xdotool key F2
 </span></code></pre></div><p></p>
 </li>
 <li>
@@ -2189,15 +2275,15 @@ With such a script, you can e.g. automatically fill in form fields and click but
 </li>
 <li>
 <p>Install a cronjob (<code>crontab -e</code>)
-</p><div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a># Execute key-press script to focus browser to allow custom scripts
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>* * * * * DISPLAY=:0 /home/pi/press-key.sh
+</p><div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"># Execute key-press script to focus browser to allow custom scripts
+</span><span id="__span-4-2">* * * * * DISPLAY=:0 /home/pi/press-key.sh
 </span></code></pre></div><p></p>
 </li>
 </ol>
-<h2 id="setup-daily-reboots">Setup daily reboots</h2>
+<h2 id="setup-daily-reboots">Setup daily reboots<a class="headerlink" href="#setup-daily-reboots" title="Permanent link">¶</a></h2>
 <p>To make sure there are no permanent hangs (e.g. a website that no longer refreshes on its own) and to keep the system more reliable, you should set up daily rebooting.
 You can do this by setting up a cronjob (<code>crontab -e</code>) with: <code>0 3 * * * sudo reboot</code></p>
-<h2 id="finalize-setup">Finalize setup</h2>
+<h2 id="finalize-setup">Finalize setup<a class="headerlink" href="#finalize-setup" title="Permanent link">¶</a></h2>
 <p>If everything is set up and works correctly, you can enable the overlay file system on the raspberry pi.</p>
 <ul>
 <li><code>sudo raspi-config</code> -&gt; 4 Performance Options -&gt; P2 Overlay File System -&gt; Yes -&gt; Ok -&gt; No -&gt; Ok -&gt; Reboot</li>
@@ -2206,11 +2292,11 @@ You can do this by setting up a cronjob (<code>crontab -e</code>) with: <code>0 
 <p>The overlay file system will not only greatly reduce SD card wear but also prevents corruption, full storage issues or similar.
 This will give you a setup that should require little to no maintenance.
 For making updates or other changes, don't forget to disable the overlay file system before doing them, otherwise everything will be reverted on the next reboot.</p>
-<h3 id="what-the-overlay-file-system-actually-does">What the overlay file system actually does</h3>
+<h3 id="what-the-overlay-file-system-actually-does">What the overlay file system actually does<a class="headerlink" href="#what-the-overlay-file-system-actually-does" title="Permanent link">¶</a></h3>
 <p>If the overlay file system is enabled, your Raspberry Pi’s root filesystem is mounted as read-only, and a temporary writable layer (in RAM) is placed on top. You can still "write" files (create, edit, or delete them) just like normal, but all changes are stored in the temporary layer. After a reboot, everything is reset to the previous state because the modifications in the temporary layer are discarded and the underlying system remains unchanged. With a standard read-only filesystem, modifying files would not be possible at all.</p>
-<h2 id="wifi-troubleshooting">WiFi troubleshooting</h2>
+<h2 id="wifi-troubleshooting">WiFi troubleshooting<a class="headerlink" href="#wifi-troubleshooting" title="Permanent link">¶</a></h2>
 <p>If you experience conenctivity issues, here are some troubleshooting steps you can try.</p>
-<h3 id="find-out-whats-causing-issues">Find out what's causing issues</h3>
+<h3 id="find-out-whats-causing-issues">Find out what's causing issues<a class="headerlink" href="#find-out-whats-causing-issues" title="Permanent link">¶</a></h3>
 <p>Example commands that can help you identify the problem:</p>
 <ul>
 <li><code>iw wlan1 link</code> - Check the signal strength (60-70 should be okay, -80 dBm or lower is really bad)</li>
@@ -2218,19 +2304,19 @@ For making updates or other changes, don't forget to disable the overlay file sy
 <li><code>sudo journalctl -u NetworkManager --since "8 hours ago"</code></li>
 <li><code>sudo journalctl -b --since "8 hours ago" | grep wlan</code></li>
 </ul>
-<h3 id="set-infinity-reconnect-attempts-untested-if-that-really-works">Set infinity reconnect attempts (untested if that really works)</h3>
+<h3 id="set-infinity-reconnect-attempts-untested-if-that-really-works">Set infinity reconnect attempts (untested if that really works)<a class="headerlink" href="#set-infinity-reconnect-attempts-untested-if-that-really-works" title="Permanent link">¶</a></h3>
 <p>Create and edit the file <code>/etc/NetworkManager/conf.d/99-retry.conf</code>:
-</p><div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>[connection]
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>autoconnect-retries=0  # 0 means infinite
+</p><div class="language-text highlight"><pre><span></span><code><span id="__span-5-1">[connection]
+</span><span id="__span-5-2">autoconnect-retries=0  # 0 means infinite
 </span></code></pre></div><p></p>
-<h3 id="for-hidden-networks-currently-not-sure-if-it-really-improves-anything-well-see">For hidden networks (currently not sure if it really improves anything, we'll see)</h3>
+<h3 id="for-hidden-networks-currently-not-sure-if-it-really-improves-anything-well-see">For hidden networks (currently not sure if it really improves anything, we'll see)<a class="headerlink" href="#for-hidden-networks-currently-not-sure-if-it-really-improves-anything-well-see" title="Permanent link">¶</a></h3>
 <p>Make sure that your network service knows that it's hidden.</p>
-<h4 id="if-using-nmcli">If using nmcli</h4>
+<h4 id="if-using-nmcli">If using nmcli<a class="headerlink" href="#if-using-nmcli" title="Permanent link">¶</a></h4>
 <p>Type <code>nmcli connection show &lt;network-name&gt;</code> and look for the line <code>802-11-wireless.hidden</code>. If it's set to <code>yes</code> and your network is hidden, it's already set up correctly.
 If it's set to <code>no</code>, you should set it to <code>yes</code> with <code>sudo nmcli connection modify &lt;network-name&gt; 802-11-wireless.hidden yes</code></p>
-<h4 id="if-using-wpa_supplicant-directly">If using wpa_supplicant directly</h4>
+<h4 id="if-using-wpa_supplicant-directly">If using wpa_supplicant directly<a class="headerlink" href="#if-using-wpa_supplicant-directly" title="Permanent link">¶</a></h4>
 <p>Add this line in your network config, e.g. add it below <code>psk=xxx</code>: <code>scan_ssid=1</code></p>
-<h4 id="how-to-find-out-what-youre-using">How to find out what you're using</h4>
+<h4 id="how-to-find-out-what-youre-using">How to find out what you're using<a class="headerlink" href="#how-to-find-out-what-youre-using" title="Permanent link">¶</a></h4>
 <p>If <code>/etc/wpa_supplicant/wpa_supplicant.conf</code> contains your network config, you're using <code>wpa_supplicant</code> directly.
 If <code>/etc/wpa_supplicant/wpa_supplicant.conf</code> does not contain your network config or does not exist at all, you're likely not using <code>wpa_supplicant</code>.
 Check if the command <code>nmcli connection show</code> shows your connected wifi network. If it shows it, you're using <code>nmcli</code>.</p>
@@ -2374,7 +2460,7 @@ Check if the command <code>nmcli connection show</code> shows your connected wif
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["search.highlight", "navigation.tabs"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["search.highlight", "navigation.tabs", "content.code.copy"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
