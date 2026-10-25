@@ -2,5 +2,5 @@ mkdocs-material
 mkdocs-awesome-nav
 mkdocs-git-revision-date-localized-plugin
 mkdocs-glightbox
-click==8.2.1
+click>=8.4.0
 mkdocs-redirects
