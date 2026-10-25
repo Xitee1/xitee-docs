@@ -5,7 +5,7 @@ description: Network boot a Raspberry Pi 3B, 3B+, 4 or 5 without an SD card. The
 # Raspberry Pi: Network boot with the root filesystem on iSCSI
 
 !!! info "AI-generated guide"
-    This guide was written by an AI. I did not write the text myself. It has not been tested end to end yet, so expect rough edges and let me know if something does not work as described.
+    This guide was written by an AI. I did not write the text myself. I did, however, carry out the procedure on a Raspberry Pi 3B with Raspberry Pi OS Lite 64-bit (Trixie), a Debian 13 Netboot VM on Proxmox and OPNsense with Dnsmasq, and the Pi now boots entirely over the network. The steps for the Pi 3B+, 4 and 5 are based on the official documentation but have not been tested by me.
 
 The Pi boots over the network and uses a virtual disk of a Proxmox VM as its root filesystem. From the Pi's point of view it is a normal block device (`/dev/sda` with ext4), from Proxmox's point of view it is just another VM disk. That gives you:
 
@@ -674,6 +674,33 @@ Enable TRIM so deleted space is returned to the thin-provisioned VM disk:
 sudo systemctl enable --now fstrim.timer
 ```
 
+## Optional tweaks
+### Swap only in RAM (Pi)
+Since Raspberry Pi OS Trixie, swap is managed by `rpi-swap`. The default `Mechanism=auto` currently resolves to *zram+file*: a compressed swap area in RAM (zram), plus a file `/var/swap` that rarely used pages are written to later. With network boot, that file lives on the iSCSI disk, so every write goes over the network and a VM outage also freezes swapped-out programs.
+
+I recommend keeping zram but dropping the file:
+
+```bash
+sudo mkdir -p /etc/rpi/swap.conf.d
+printf '[Main]\nMechanism=zram\n' | sudo tee /etc/rpi/swap.conf.d/90-zram-only.conf
+sudo reboot
+```
+
+??? info "All values for `Mechanism`"
+    | Value | Behaviour |
+    |---|---|
+    | `auto` (default) | currently `zram+file`, may change in future releases |
+    | `zram` | compressed swap in RAM only, all `[File]` options are ignored |
+    | `zram+file` | zram plus `/var/swap` as writeback storage for idle pages |
+    | `swapfile` | classic swap file on the root filesystem |
+    | `none` | no swap, an existing swap file is removed |
+
+After the reboot:
+```bash
+swapon --show
+```
+Must show `/dev/zram0` only. A leftover `/var/swap` can be deleted with `sudo rm /var/swap`.
+
 ## Troubleshooting
 | Symptom | Cause / fix |
 |---|---|
@@ -924,4 +951,5 @@ A new Pi has a new serial number and a new MAC address. The iSCSI disk, target a
 - [Debian Wiki: SAN/iSCSI/LIO](https://wiki.debian.org/SAN/iSCSI/LIO){:target="_blank"}
 - [Red Hat: iSCSI root timeouts](https://docs.redhat.com/en/documentation/Red_Hat_Enterprise_Linux/6/html/storage_administration_guide/iscsi-root){:target="_blank"}
 - [RFC 3721: iSCSI naming](https://datatracker.ietf.org/doc/rfc3721){:target="_blank"}
+- [rpi-swap: swap.conf reference](https://deepwiki.com/raspberrypi/rpi-swap/3.1-swap.conf-reference){:target="_blank"}
 - [OPNsense docs: Dnsmasq DNS & DHCP](https://docs.opnsense.org/manual/dnsmasq.html){:target="_blank"}
