@@ -1084,6 +1084,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#optional-tweaks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional tweaks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Optional tweaks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swap-only-in-ram-pi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Swap only in RAM (Pi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2457,6 +2485,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#optional-tweaks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional tweaks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Optional tweaks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swap-only-in-ram-pi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Swap only in RAM (Pi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2595,7 +2651,7 @@
 <h1 id="raspberry-pi-network-boot-with-the-root-filesystem-on-iscsi">Raspberry Pi: Network boot with the root filesystem on iSCSI<a class="headerlink" href="#raspberry-pi-network-boot-with-the-root-filesystem-on-iscsi" title="Permanent link">¶</a></h1>
 <div class="admonition info">
 <p class="admonition-title">AI-generated guide</p>
-<p>This guide was written by an AI. I did not write the text myself. It has not been tested end to end yet, so expect rough edges and let me know if something does not work as described.</p>
+<p>This guide was written by an AI. I did not write the text myself. I did, however, carry out the procedure on a Raspberry Pi 3B with Raspberry Pi OS Lite 64-bit (Trixie), a Debian 13 Netboot VM on Proxmox and OPNsense with Dnsmasq, and the Pi now boots entirely over the network. The steps for the Pi 3B+, 4 and 5 are based on the official documentation but have not been tested by me.</p>
 </div>
 <p>The Pi boots over the network and uses a virtual disk of a Proxmox VM as its root filesystem. From the Pi's point of view it is a normal block device (<code>/dev/sda</code> with ext4), from Proxmox's point of view it is just another VM disk. That gives you:</p>
 <ul>
@@ -3689,6 +3745,51 @@
 <p>Enable TRIM so deleted space is returned to the thin-provisioned VM disk:
 </p><div class="language-bash highlight"><pre><span></span><code><span id="__span-51-1">sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>fstrim.timer
 </span></code></pre></div><p></p>
+<h2 id="optional-tweaks">Optional tweaks<a class="headerlink" href="#optional-tweaks" title="Permanent link">¶</a></h2>
+<h3 id="swap-only-in-ram-pi">Swap only in RAM (Pi)<a class="headerlink" href="#swap-only-in-ram-pi" title="Permanent link">¶</a></h3>
+<p>Since Raspberry Pi OS Trixie, swap is managed by <code>rpi-swap</code>. The default <code>Mechanism=auto</code> currently resolves to <em>zram+file</em>: a compressed swap area in RAM (zram), plus a file <code>/var/swap</code> that rarely used pages are written to later. With network boot, that file lives on the iSCSI disk, so every write goes over the network and a VM outage also freezes swapped-out programs.</p>
+<p>I recommend keeping zram but dropping the file:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-52-1">sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/etc/rpi/swap.conf.d
+</span><span id="__span-52-2"><span class="nb">printf</span><span class="w"> </span><span class="s1">'[Main]\nMechanism=zram\n'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/rpi/swap.conf.d/90-zram-only.conf
+</span><span id="__span-52-3">sudo<span class="w"> </span>reboot
+</span></code></pre></div>
+<details class="info">
+<summary>All values for <code>Mechanism</code></summary>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auto</code> (default)</td>
+<td>currently <code>zram+file</code>, may change in future releases</td>
+</tr>
+<tr>
+<td><code>zram</code></td>
+<td>compressed swap in RAM only, all <code>[File]</code> options are ignored</td>
+</tr>
+<tr>
+<td><code>zram+file</code></td>
+<td>zram plus <code>/var/swap</code> as writeback storage for idle pages</td>
+</tr>
+<tr>
+<td><code>swapfile</code></td>
+<td>classic swap file on the root filesystem</td>
+</tr>
+<tr>
+<td><code>none</code></td>
+<td>no swap, an existing swap file is removed</td>
+</tr>
+</tbody>
+</table>
+</details>
+<p>After the reboot:
+</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-53-1">swapon<span class="w"> </span>--show
+</span></code></pre></div>
+Must show <code>/dev/zram0</code> only. A leftover <code>/var/swap</code> can be deleted with <code>sudo rm /var/swap</code>.<p></p>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
 <table>
 <thead>
@@ -3823,13 +3924,13 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="15:2"><input checked="checked" id="__tabbed_15_1" name="__tabbed_15" type="radio"><input id="__tabbed_15_2" name="__tabbed_15" type="radio"><div class="tabbed-labels"><label for="__tabbed_15_1">Template</label><label for="__tabbed_15_2">Example</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-52-1">nano<span class="w"> </span>/srv/tftp/&lt;HOST&gt;/cmdline.txt
-</span><span id="__span-52-2">nano<span class="w"> </span>/srv/tftp/&lt;HOST&gt;/config.txt
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-54-1">nano<span class="w"> </span>/srv/tftp/&lt;HOST&gt;/cmdline.txt
+</span><span id="__span-54-2">nano<span class="w"> </span>/srv/tftp/&lt;HOST&gt;/config.txt
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-53-1">nano<span class="w"> </span>/srv/tftp/kitchen-pi/cmdline.txt
-</span><span id="__span-53-2">nano<span class="w"> </span>/srv/tftp/kitchen-pi/config.txt
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-55-1">nano<span class="w"> </span>/srv/tftp/kitchen-pi/cmdline.txt
+</span><span id="__span-55-2">nano<span class="w"> </span>/srv/tftp/kitchen-pi/config.txt
 </span></code></pre></div>
 </div>
 </div>
@@ -3862,14 +3963,14 @@
 <li>Shut down the Pi, or cut its power if it hangs.</li>
 <li>
 <p>On the VM, check that no iSCSI session is active anymore:
-</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-54-1">targetcli<span class="w"> </span>sessions
+</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-56-1">targetcli<span class="w"> </span>sessions
 </span></code></pre></div>
 It must report <code>(no open sessions)</code>. After cutting the power this can take up to about a minute.<p></p>
 </li>
 <li>
 <p>Release the disk from the iSCSI service. As long as the target is active, it holds the disk exclusively and <code>mount</code> fails with <em>Can't open blockdev</em>:
-</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-55-1">targetcli<span class="w"> </span>saveconfig
-</span><span id="__span-55-2">targetctl<span class="w"> </span>clear
+</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-57-1">targetcli<span class="w"> </span>saveconfig
+</span><span id="__span-57-2">targetctl<span class="w"> </span>clear
 </span></code></pre></div><p></p>
 <div class="admonition warning">
 <p class="admonition-title">Affects all Pis</p>
@@ -3883,15 +3984,15 @@ It must report <code>(no open sessions)</code>. After cutting the power this can
 <div class="tabbed-set tabbed-alternate" data-tabs="16:2"><input checked="checked" id="__tabbed_16_1" name="__tabbed_16" type="radio"><input id="__tabbed_16_2" name="__tabbed_16" type="radio"><div class="tabbed-labels"><label for="__tabbed_16_1">Template</label><label for="__tabbed_16_2">Example</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-56-1">mount<span class="w"> </span>&lt;DISK&gt;<span class="w"> </span>/mnt
-</span><span id="__span-56-2">nano<span class="w"> </span>/mnt/etc/fstab
-</span><span id="__span-56-3">umount<span class="w"> </span>/mnt
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-58-1">mount<span class="w"> </span>&lt;DISK&gt;<span class="w"> </span>/mnt
+</span><span id="__span-58-2">nano<span class="w"> </span>/mnt/etc/fstab
+</span><span id="__span-58-3">umount<span class="w"> </span>/mnt
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-57-1">mount<span class="w"> </span>/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1<span class="w"> </span>/mnt
-</span><span id="__span-57-2">nano<span class="w"> </span>/mnt/etc/fstab
-</span><span id="__span-57-3">umount<span class="w"> </span>/mnt
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-59-1">mount<span class="w"> </span>/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1<span class="w"> </span>/mnt
+</span><span id="__span-59-2">nano<span class="w"> </span>/mnt/etc/fstab
+</span><span id="__span-59-3">umount<span class="w"> </span>/mnt
 </span></code></pre></div>
 </div>
 </div>
@@ -3899,8 +4000,8 @@ It must report <code>(no open sessions)</code>. After cutting the power this can
 <ol>
 <li>
 <p>Restore the iSCSI target and check that it is back:
-</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-58-1">targetctl<span class="w"> </span>restore
-</span><span id="__span-58-2">targetcli<span class="w"> </span>ls
+</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-60-1">targetctl<span class="w"> </span>restore
+</span><span id="__span-60-2">targetcli<span class="w"> </span>ls
 </span></code></pre></div>
 <code>targetcli ls</code> must show the backstore, the target with its ACL and the LUN again. Without this step no Pi can boot.<p></p>
 </li>
@@ -3936,39 +4037,39 @@ It must report <code>(no open sessions)</code>. After cutting the power this can
 <p>When files alone are not enough (e.g. a broken package), you can run the Pi's own programs on the VM. The VM is x86, the Pi system is ARM, so <code>qemu-user-static</code> emulates the ARM binaries. Slow, but <code>apt</code>, <code>dpkg</code> and <code>update-initramfs</code> work.</p>
 <p>Same rules as above: <strong>the Pi must be off</strong> (<code>targetcli sessions</code> shows <code>(no open sessions)</code>).</p>
 <p>Release the disk from the iSCSI service (affects all Pis on this VM):
-</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-59-1">targetcli<span class="w"> </span>saveconfig
-</span><span id="__span-59-2">targetctl<span class="w"> </span>clear
+</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-61-1">targetcli<span class="w"> </span>saveconfig
+</span><span id="__span-61-2">targetctl<span class="w"> </span>clear
 </span></code></pre></div><p></p>
 <p>Once, on the VM:
-</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-60-1">apt<span class="w"> </span>install<span class="w"> </span>qemu-user-static
+</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-62-1">apt<span class="w"> </span>install<span class="w"> </span>qemu-user-static
 </span></code></pre></div><p></p>
 <p>Mount the disk, the boot files and the system folders, then switch into the Pi system:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="17:2"><input checked="checked" id="__tabbed_17_1" name="__tabbed_17" type="radio"><input id="__tabbed_17_2" name="__tabbed_17" type="radio"><div class="tabbed-labels"><label for="__tabbed_17_1">Template</label><label for="__tabbed_17_2">Example</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-61-1">mount<span class="w"> </span>&lt;DISK&gt;<span class="w"> </span>/mnt
-</span><span id="__span-61-2">mount<span class="w"> </span>--bind<span class="w"> </span>/srv/tftp/&lt;HOST&gt;<span class="w"> </span>/mnt/boot/firmware
-</span><span id="__span-61-3"><span class="k">for</span><span class="w"> </span>d<span class="w"> </span><span class="k">in</span><span class="w"> </span>proc<span class="w"> </span>sys<span class="w"> </span>dev<span class="w"> </span>dev/pts<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>mount<span class="w"> </span>--bind<span class="w"> </span>/<span class="nv">$d</span><span class="w"> </span>/mnt/<span class="nv">$d</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
-</span><span id="__span-61-4">chroot<span class="w"> </span>/mnt<span class="w"> </span>/bin/bash
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-63-1">mount<span class="w"> </span>&lt;DISK&gt;<span class="w"> </span>/mnt
+</span><span id="__span-63-2">mount<span class="w"> </span>--bind<span class="w"> </span>/srv/tftp/&lt;HOST&gt;<span class="w"> </span>/mnt/boot/firmware
+</span><span id="__span-63-3"><span class="k">for</span><span class="w"> </span>d<span class="w"> </span><span class="k">in</span><span class="w"> </span>proc<span class="w"> </span>sys<span class="w"> </span>dev<span class="w"> </span>dev/pts<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>mount<span class="w"> </span>--bind<span class="w"> </span>/<span class="nv">$d</span><span class="w"> </span>/mnt/<span class="nv">$d</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+</span><span id="__span-63-4">chroot<span class="w"> </span>/mnt<span class="w"> </span>/bin/bash
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-62-1">mount<span class="w"> </span>/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1<span class="w"> </span>/mnt
-</span><span id="__span-62-2">mount<span class="w"> </span>--bind<span class="w"> </span>/srv/tftp/kitchen-pi<span class="w"> </span>/mnt/boot/firmware
-</span><span id="__span-62-3"><span class="k">for</span><span class="w"> </span>d<span class="w"> </span><span class="k">in</span><span class="w"> </span>proc<span class="w"> </span>sys<span class="w"> </span>dev<span class="w"> </span>dev/pts<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>mount<span class="w"> </span>--bind<span class="w"> </span>/<span class="nv">$d</span><span class="w"> </span>/mnt/<span class="nv">$d</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
-</span><span id="__span-62-4">chroot<span class="w"> </span>/mnt<span class="w"> </span>/bin/bash
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-64-1">mount<span class="w"> </span>/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1<span class="w"> </span>/mnt
+</span><span id="__span-64-2">mount<span class="w"> </span>--bind<span class="w"> </span>/srv/tftp/kitchen-pi<span class="w"> </span>/mnt/boot/firmware
+</span><span id="__span-64-3"><span class="k">for</span><span class="w"> </span>d<span class="w"> </span><span class="k">in</span><span class="w"> </span>proc<span class="w"> </span>sys<span class="w"> </span>dev<span class="w"> </span>dev/pts<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>mount<span class="w"> </span>--bind<span class="w"> </span>/<span class="nv">$d</span><span class="w"> </span>/mnt/<span class="nv">$d</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+</span><span id="__span-64-4">chroot<span class="w"> </span>/mnt<span class="w"> </span>/bin/bash
 </span></code></pre></div>
 </div>
 </div>
 </div>
 <p>Check that you are inside the Pi system, it must show <code>aarch64</code>:
-</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-63-1">uname<span class="w"> </span>-m
+</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-65-1">uname<span class="w"> </span>-m
 </span></code></pre></div><p></p>
 <p>Repair, e.g. <code>dpkg --configure -a</code> or <code>apt install --reinstall &lt;package&gt;</code>. Then leave, unmount everything and restore the iSCSI target:
-</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-64-1"><span class="nb">exit</span>
-</span><span id="__span-64-2">umount<span class="w"> </span>-R<span class="w"> </span>/mnt
-</span><span id="__span-64-3">targetctl<span class="w"> </span>restore
-</span><span id="__span-64-4">targetcli<span class="w"> </span>ls
+</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-66-1"><span class="nb">exit</span>
+</span><span id="__span-66-2">umount<span class="w"> </span>-R<span class="w"> </span>/mnt
+</span><span id="__span-66-3">targetctl<span class="w"> </span>restore
+</span><span id="__span-66-4">targetcli<span class="w"> </span>ls
 </span></code></pre></div><p></p>
 <h3 id="roll-back">Roll back<a class="headerlink" href="#roll-back" title="Permanent link">¶</a></h3>
 <table>
@@ -4021,25 +4122,25 @@ It must report <code>(no open sessions)</code>. After cutting the power this can
 <summary>Kernel log over the network (netconsole, untested)</summary>
 <p>The kernel can send its messages via UDP to another host. On the Pi, <code>netconsole</code> is a kernel module, so it has to be in the initramfs and configured with the module syntax.</p>
 <p>On the Pi:
-</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-65-1"><span class="nb">echo</span><span class="w"> </span>netconsole<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/initramfs-tools/modules
-</span><span id="__span-65-2">sudo<span class="w"> </span>update-initramfs<span class="w"> </span>-u
+</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-67-1"><span class="nb">echo</span><span class="w"> </span>netconsole<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/initramfs-tools/modules
+</span><span id="__span-67-2">sudo<span class="w"> </span>update-initramfs<span class="w"> </span>-u
 </span></code></pre></div><p></p>
 <p>Append to <code>cmdline.txt</code> (same single line), with the IP of the VM (<code>&lt;VM-IP&gt;</code>, e.g. <code>192.168.1.20</code>):</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="18:2"><input checked="checked" id="__tabbed_18_1" name="__tabbed_18" type="radio"><input id="__tabbed_18_2" name="__tabbed_18" type="radio"><div class="tabbed-labels"><label for="__tabbed_18_1">Template</label><label for="__tabbed_18_2">Example</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="language-text highlight"><pre><span></span><code><span id="__span-66-1">netconsole.netconsole=@/eth0,6666@&lt;VM-IP&gt;/
+<div class="language-text highlight"><pre><span></span><code><span id="__span-68-1">netconsole.netconsole=@/eth0,6666@&lt;VM-IP&gt;/
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="language-text highlight"><pre><span></span><code><span id="__span-67-1">netconsole.netconsole=@/eth0,6666@192.168.1.20/
+<div class="language-text highlight"><pre><span></span><code><span id="__span-69-1">netconsole.netconsole=@/eth0,6666@192.168.1.20/
 </span></code></pre></div>
 </div>
 </div>
 </div>
 <p>Listen on the VM:
-</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-68-1">apt<span class="w"> </span>install<span class="w"> </span>netcat-openbsd
-</span><span id="__span-68-2">nc<span class="w"> </span>-klu<span class="w"> </span><span class="m">6666</span>
+</p><div class="language-bash highlight"><pre><span></span><code><span id="__span-70-1">apt<span class="w"> </span>install<span class="w"> </span>netcat-openbsd
+</span><span id="__span-70-2">nc<span class="w"> </span>-klu<span class="w"> </span><span class="m">6666</span>
 </span></code></pre></div><p></p>
 <p>Messages start once the network driver is up, so very early boot errors are not covered. Not tested with this setup yet.</p>
 </details>
@@ -4103,13 +4204,13 @@ It must report <code>(no open sessions)</code>. After cutting the power this can
 <div class="tabbed-set tabbed-alternate" data-tabs="19:2"><input checked="checked" id="__tabbed_19_1" name="__tabbed_19" type="radio"><input id="__tabbed_19_2" name="__tabbed_19" type="radio"><div class="tabbed-labels"><label for="__tabbed_19_1">Template</label><label for="__tabbed_19_2">Example</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-69-1">rm<span class="w"> </span>/srv/tftp/&lt;OLD-SERIAL&gt;
-</span><span id="__span-69-2">ln<span class="w"> </span>-s<span class="w"> </span>&lt;HOST&gt;<span class="w"> </span>/srv/tftp/&lt;NEW-SERIAL&gt;
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-71-1">rm<span class="w"> </span>/srv/tftp/&lt;OLD-SERIAL&gt;
+</span><span id="__span-71-2">ln<span class="w"> </span>-s<span class="w"> </span>&lt;HOST&gt;<span class="w"> </span>/srv/tftp/&lt;NEW-SERIAL&gt;
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-70-1">rm<span class="w"> </span>/srv/tftp/a1b2c3d4
-</span><span id="__span-70-2">ln<span class="w"> </span>-s<span class="w"> </span>kitchen-pi<span class="w"> </span>/srv/tftp/e5f6a7b8
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-72-1">rm<span class="w"> </span>/srv/tftp/a1b2c3d4
+</span><span id="__span-72-2">ln<span class="w"> </span>-s<span class="w"> </span>kitchen-pi<span class="w"> </span>/srv/tftp/e5f6a7b8
 </span></code></pre></div>
 </div>
 </div>
@@ -4137,6 +4238,7 @@ It must report <code>(no open sessions)</code>. After cutting the power this can
 <li><a href="https://wiki.debian.org/SAN/iSCSI/LIO" target="_blank">Debian Wiki: SAN/iSCSI/LIO</a></li>
 <li><a href="https://docs.redhat.com/en/documentation/Red_Hat_Enterprise_Linux/6/html/storage_administration_guide/iscsi-root" target="_blank">Red Hat: iSCSI root timeouts</a></li>
 <li><a href="https://datatracker.ietf.org/doc/rfc3721" target="_blank">RFC 3721: iSCSI naming</a></li>
+<li><a href="https://deepwiki.com/raspberrypi/rpi-swap/3.1-swap.conf-reference" target="_blank">rpi-swap: swap.conf reference</a></li>
 <li><a href="https://docs.opnsense.org/manual/dnsmasq.html" target="_blank">OPNsense docs: Dnsmasq DNS &amp; DHCP</a></li>
 </ul>
 
@@ -4161,7 +4263,7 @@ It must report <code>(no open sessions)</code>. After cutting the power this can
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="October 25, 2026 18:20:12 UTC"><span class="timeago" datetime="2026-10-25T18:20:12+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 25, 2026 18:20:12 UTC">2026-10-25</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="October 25, 2026 20:25:02 UTC"><span class="timeago" datetime="2026-10-25T20:25:02+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 25, 2026 20:25:02 UTC">2026-10-25</span>
   </span>
 
     
