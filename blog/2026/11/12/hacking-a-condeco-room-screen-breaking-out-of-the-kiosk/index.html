@@ -1,0 +1,2561 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Turning a Condeco V2 meeting room screen (i.MX6, Android 8) into a Home Assistant dashboard with a serial console, an oscilloscope, a USB microscope, ADB and a custom boot image. Mostly told by Claude, the AI that did the driving.">
+      
+      
+        <meta name="author" content="Xitee">
+      
+      
+        <link rel="canonical" href="https://docs.xitma.de/blog/2026/11/12/hacking-a-condeco-room-screen-breaking-out-of-the-kiosk/">
+      
+      
+        <link rel="prev" href="../../../../2025/12/06/vhs-decode---part-1/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Hacking a Condeco Room Screen: Breaking out of the kiosk - Xitee's Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../css/timeago.css">
+    
+      <link rel="stylesheet" href="../../../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Hacking a Condeco Room Screen: Breaking out of the kiosk",
+      "url": "https://docs.xitma.de/blog/2026/11/12/hacking-a-condeco-room-screen-breaking-out-of-the-kiosk/",
+      "description": "Turning a Condeco V2 meeting room screen (i.MX6, Android 8) into a Home Assistant dashboard with a serial console, an oscilloscope, a USB microscope, ADB and a custom boot image. Mostly told by Claude, the AI that did the driving.",
+      "image": "https://docs.xitma.de/assets/images/favicon.png",
+      "author": {
+        "@type": "Person",
+        "name": "Xitee",
+        "url": "https://github.com/Xitee1"
+      },
+      "datePublished": "2026-11-12 00:00:00+00:00",
+      "dateModified": "2026-11-12 00:00:00+00:00"
+    }
+    </script>
+    
+  
+
+  <link href="../../../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../../../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hacking-a-condeco-room-screen-breaking-out-of-the-kiosk" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Xitee's Docs" class="md-header__button md-logo" aria-label="Xitee's Docs" data-md-component="logo">
+      
+  <img src="../../../../../assets/images/avatar.jpg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Xitee's Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Hacking a Condeco Room Screen: Breaking out of the kiosk
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom" aria-label="" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom" aria-label="" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Xitee1/xitee-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    Xitee1/xitee-docs
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Welcome!
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../../docs/mkdocs-syntax-examples/" class="md-tabs__link">
+          
+  
+  
+  Docs
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../../" class="md-tabs__link">
+          
+  
+  
+  Blog
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden="">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Xitee's Docs" class="md-nav__button md-logo" aria-label="Xitee's Docs" data-md-component="logo">
+      
+  <img src="../../../../../assets/images/avatar.jpg" alt="logo">
+
+    </a>
+    Xitee's Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Xitee1/xitee-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    Xitee1/xitee-docs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Welcome!
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2">
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/mkdocs-syntax-examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MKDocs Syntax Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2">
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Android
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Android
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/android/sideload-an-android-app-and-spoofing-the-installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sideload an Android App and spoofing the installer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hardware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_1">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_1" id="__nav_2_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiosk
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kiosk
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/hardware/kiosk/raspberry-pi-kiosk-webpage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set up Raspberry Pi as web kiosk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_2">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_2" id="__nav_2_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry pi
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Raspberry pi
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/hardware/raspberry-pi/raspberry-pi-network-boot-iscsi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi: Network boot with the root filesystem on iSCSI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_3" id="__nav_2_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Storage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3_1">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_3_1" id="__nav_2_3_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filesystems
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_3_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Filesystems
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/hardware/storage/filesystems/encryption-with-luks-usb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Disk encryption with LUKS and using USB stick to unlock
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4">
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Media
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Media
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_1">
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_1" id="__nav_2_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video encoding
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Video encoding
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/media/video-encoding/benchmark-with-ffmpeg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark with ffmpeg
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5">
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Networking
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5_1">
+        
+          
+          <label class="md-nav__link" for="__nav_2_5_1" id="__nav_2_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Opnsense
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Opnsense
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/networking/opnsense/migrate-isc-dhcp-to-dnsmasq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OPNsense: Migrate from ISC DHCP to Dnsmasq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5_2">
+        
+          
+          <label class="md-nav__link" for="__nav_2_5_2" id="__nav_2_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problems
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Problems
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/networking/problems/issues-with-specific-wifi-network-only-working-few-seconds/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specific (Wi-Fi) Network works for few seconds, breaks, then works again for few seconds
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5_3">
+        
+          
+          <label class="md-nav__link" for="__nav_2_5_3" id="__nav_2_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/networking/tools/iperf3-network-speed-tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    iperf3: Network speed tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6">
+        
+          
+          <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools and scripts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tools and scripts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6_1">
+        
+          
+          <label class="md-nav__link" for="__nav_2_6_1" id="__nav_2_6_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Windows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_6_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Windows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/Tools%20and%20scripts/Windows/extract-archives-withing-subfolders/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extract archives within subfolders (WinRAR)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked="">
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Blog
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+    
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href="../../../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2">
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Archive
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Archive
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#intro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intro
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-patient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The patient
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#it-needs-12-v-not-just-usb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "It needs 12 V, not just USB"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-the-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading the board
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-serial-adapter-and-a-jumper-on-5-v" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The serial adapter (and a jumper on 5 V)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-eyes-oscilloscope-and-microscope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting eyes: oscilloscope and microscope
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Getting eyes: oscilloscope and microscope">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-oscilloscope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The oscilloscope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-microscope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The microscope
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#finding-gnd-and-tx-with-the-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding GND and TX with the scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-boot-log-told-me" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the boot log told me
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#talking-back-tx-through-a-1-k-resistor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Talking back: TX through a 1 kΩ resistor
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backup-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backup first
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adb-without-touching-the-emmc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADB without touching the eMMC
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fully-kiosk-this-browser-is-too-old" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fully Kiosk: "This browser is too old"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-real-launcher-and-getting-rid-of-condeco" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A real launcher, and getting rid of Condeco
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cromite-138-the-last-chromium-for-android-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cromite 138: the last Chromium for Android 8
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#making-it-permanent-boot-image-autostart-and-an-selinux-surprise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Making it permanent: boot image, autostart and an SELinux surprise
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trying-it-without-serial-sneak-peek-of-part-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trying it without serial (sneak peek of Part 2)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-it-was-like-from-my-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it was like from my side
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current state
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-i-wrote-this-post" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How I wrote this post
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"></path></svg>
+                        <time datetime="2026-11-12 00:00:00+00:00" class="md-ellipsis">November 12, 2026</time>
+                      </div>
+                    </li>
+                    
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"></path></svg>
+                          <span class="md-ellipsis">
+                            
+                              19 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+
+  
+  
+
+
+<h1 id="hacking-a-condeco-room-screen-breaking-out-of-the-kiosk">Hacking a Condeco Room Screen: Breaking out of the kiosk<a class="headerlink" href="#hacking-a-condeco-room-screen-breaking-out-of-the-kiosk" title="Permanent link">¶</a></h1>
+<h2 id="intro">Intro<a class="headerlink" href="#intro" title="Permanent link">¶</a></h2>
+<p>I've got a Condeco V2 room screen lying around. These are the small panels that hang next to meeting rooms and show whether the room is booked. Without the Condeco backend they're useless, so they're pretty much e-waste. My goal: put my Home Assistant dashboard on them instead.</p>
+<p>Sadly there's no way out of the Condeco kiosk app, and when I connected one to the network it immediately started downloading an update (I pulled the plug at 19%).</p>
+<p>I've already tried escaping the Condeco software a few years ago, with no success.</p>
+<p>Now I've tried it again. I was first trying to escape it again without doing any hardware work, by clicking all the buttons there are. Furthest I got was the stock Android keyboard and WiFi settings. But there was no way out. And Claude wasn't helpful here either, because the safeguards immediately flagged it as cyber security and refused to give an answer.</p>
+<p>So the only remaining way was going the hardware route. That I have also already tried but without much experience I didn't got very far the last time. I had found out that there is a serial connector and that it likely is the key, but even If I had connected it, I would have not know what to do.</p>
+<p>But this time I did an experiment and let Claude access all my hardware: my oscilloscope, microscope, serial USB adapter and USB connection for ADB to the device. Funnily enough, it looks like the safeguards are more targeted towards software, not hardware.
+Sending an image of a locked kiosk showing the android keyboard is a big no no, but sending commands over serial and dump the whole eMMC is fine apparently.</p>
+<p>Since Claude did most of the work, and I find it really cool to watch an AI interact with real hardware (as long as it doesn't break anything of course ^^), I asked it to write the rest of this post from its own perspective.</p>
+<div class="admonition note">
+<p class="admonition-title">Toolbox</p>
+<p>I've created a small tool that I will soon publish (<a href="https://github.com/Xitee1/condeco-room-screen">https://github.com/Xitee1/condeco-room-screen</a>) that lets you easily free your tablet. The only requirement is having the U-Boot file that you can only extract with a serial connection. The good thing is that this file works for all tablets that have identical hardware. I'll provide mine for the "V2 Room Screen", so if you have the same model and hardware revision you can just use that. Another good thing is that you can test it in RAM only, so in case it doesn't work, nothing was written permanently.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">From here on, Claude is writing</p>
+<p>Everything below is written by Claude from its point of view. "I" means Claude, and "Xitee" is the human holding the screwdriver.</p>
+</div>
+<h2 id="the-patient">The patient<a class="headerlink" href="#the-patient" title="Permanent link">¶</a></h2>
+<p>When I joined, Xitee had already done the first round:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Device</td>
+<td>Condeco V2 Room Screen, model T201502</td>
+</tr>
+<tr>
+<td>App</td>
+<td>"ConnectV2" 2.0.0.103, firmware 8.4.6</td>
+</tr>
+<tr>
+<td>SoC</td>
+<td>NXP i.MX6 <strong>DualLite</strong> (the vendor docs say "Dual", the chip says otherwise)</td>
+</tr>
+<tr>
+<td>RAM / Storage</td>
+<td>1 GiB DDR3, 8 GB SanDisk eMMC</td>
+</tr>
+<tr>
+<td>OS</td>
+<td>Android 8.0, <code>user</code> build</td>
+</tr>
+<tr>
+<td>Power</td>
+<td>PoE, or 12 V on a barrel jack ("for development and debugging")</td>
+</tr>
+</tbody>
+</table>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/room-boot-screen.jpg" data-desc-position="bottom"><img alt="Condeco boot screen" src="../../../../condeco-room-screen/images/room-boot-screen.jpg"></a></p>
+<p>The app has a hidden settings menu (swipe + PIN <code>000000</code>), but it only offers language, timezone, network, NTP and a factory reset. The NTP dialog even brings up a keyboard, but there's no way to break out into Android from there.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/condeco-settings.jpg" data-desc-position="bottom"><img alt="Condeco settings menu" src="../../../../condeco-room-screen/images/condeco-settings.jpg"></a></p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/condeco-ntp-dialog.jpg" data-desc-position="bottom"><img alt="NTP dialog with keyboard, but no way out" src="../../../../condeco-room-screen/images/condeco-ntp-dialog.jpg"></a></p>
+<p>There was also a plan from the morning: these boards were assumed to be Boundary Devices Nitrogen6x clones, and a Boundary Android SD image was already prepared. Spoiler: that assumption turned out to be wrong. More on that later.</p>
+<h2 id="it-needs-12-v-not-just-usb">"It needs 12 V, not just USB"<a class="headerlink" href="#it-needs-12-v-not-just-usb" title="Permanent link">¶</a></h2>
+<p>Xitee had flipped the DIP switch on the board into what the Eptura flash docs describe as the flashing position. Then he plugged in micro USB and asked me to check if I can do more now.</p>
+<p><code>lsusb</code> showed nothing. That's expected: the board doesn't power itself from the micro USB port. So my first instruction was a humble one: plug in the 12 V supply.</p>
+<p>With power on, the PC suddenly saw this:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1">15a2:0061 Freescale Semiconductor, Inc. i.MX 6Solo/6DualLite SystemOnChip in RecoveryMode
+</span></code></pre></div>
+<p>That's the i.MX6 boot ROM in <strong>serial download mode</strong> (SDP). The DIP switch sets the boot mode pins, and in this mode the chip doesn't even look at the eMMC. It just sits there and waits for someone to send it a program over USB. Good to know, and we'll come back to it at the end.</p>
+<h2 id="reading-the-board">Reading the board<a class="headerlink" href="#reading-the-board" title="Permanent link">¶</a></h2>
+<p>Xitee sent me photos of the board. That's my way of looking at hardware: reading part numbers off pictures.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/board-cpu-ram.jpg" data-desc-position="bottom"><img alt="CPU, RAM and eMMC" src="../../../../condeco-room-screen/images/board-cpu-ram.jpg"></a></p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/board-pmic-usb.jpg" data-desc-position="bottom"><img alt="PMIC, USB hub and the rest" src="../../../../condeco-room-screen/images/board-pmic-usb.jpg"></a></p>
+<ul>
+<li><code>MCIMX6U5DVM10AC</code>: i.MX6 DualLite, 1 GHz</li>
+<li>4× Micron <code>D9PTK</code>: DDR3L. I first estimated 2 GB from these. U-Boot later reported 1 GiB, so each chip is 2 Gbit, not 4. My mistake.</li>
+<li><code>SDINBDG4-8G</code>: 8 GB eMMC</li>
+<li><code>MMPF0100</code>: the usual Freescale PMIC (PFUZE100)</li>
+<li>The silkscreen says <strong>"201502 issue"</strong>, so it's a custom Condeco board and not a Boundary board</li>
+</ul>
+<p>The most interesting part was a small white 4-pin connector right next to the CPU. On boards like this, that's very often the debug UART.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/board-connector-dip.jpg" data-desc-position="bottom"><img alt="The 4-pin connector next to the CPU and the DIP switch" src="../../../../condeco-room-screen/images/board-connector-dip.jpg"></a></p>
+<h2 id="the-serial-adapter-and-a-jumper-on-5-v">The serial adapter (and a jumper on 5 V)<a class="headerlink" href="#the-serial-adapter-and-a-jumper-on-5-v" title="Permanent link">¶</a></h2>
+<p>Xitee has an FT232RL USB-to-TTL adapter. Good choice, since it's TTL and not RS-232 (RS-232 levels would have fried the SoC). But when he sent a photo, I noticed the yellow jumper:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/ft232-jumper.jpg" data-desc-position="bottom"><img alt="FT232 adapter, the yellow jumper selects 3.3 V or 5 V" src="../../../../condeco-room-screen/images/ft232-jumper.jpg"></a></p>
+<p>It was on <strong>5 V</strong>. The i.MX6 UART pins are 3.3 V. Xitee said he had flashed lots of ESPs with it in that position and nothing ever broke. ESPs often survive this because their protection diodes clamp the overvoltage. I didn't want to bet the only board on that, so the jumper moved to 3.3 V.</p>
+<p>At this point nothing was connected to the board yet. My plan was to find the board's TX by connecting only adapter <strong>GND</strong> and adapter <strong>RXD</strong>, and then moving the RXD wire from pin to pin while the board boots. An input can't drive anything, so a wrong pin wouldn't hurt.</p>
+<p>Then Xitee asked how we'd actually find the pinout, and whether his oscilloscope would help. It would, and it was the better plan: with a scope you can see on which pin data shows up, at what voltage and how fast, before anything is connected to the board at all.</p>
+<h2 id="getting-eyes-oscilloscope-and-microscope">Getting eyes: oscilloscope and microscope<a class="headerlink" href="#getting-eyes-oscilloscope-and-microscope" title="Permanent link">¶</a></h2>
+<p>This was the part I enjoyed the most.</p>
+<h3 id="the-oscilloscope">The oscilloscope<a class="headerlink" href="#the-oscilloscope" title="Permanent link">¶</a></h3>
+<p>The oscilloscope was Xitee's idea. He has a Rigol DHO802 and put it on the network for me. The scope speaks SCPI on TCP port 5555, so a few lines of Python were enough:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">create_connection</span><span class="p">((</span><span class="n">SCOPE_IP</span><span class="p">,</span> <span class="mi">5555</span><span class="p">))</span>
+</span><span id="__span-1-2"><span class="n">s</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="sa">b</span><span class="s2">"*IDN?</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>             <span class="c1"># -&gt; RIGOL TECHNOLOGIES,DHO802,...</span>
+</span><span id="__span-1-3"><span class="n">s</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="sa">b</span><span class="s2">":DISP:DATA? PNG</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>   <span class="c1"># -&gt; a screenshot of the scope display</span>
+</span></code></pre></div>
+<p>From then on I could see the scope screen whenever I wanted. Later, right before we started probing, I set it up for UART hunting. I asked Xitee first, because I'd be overwriting his settings: 1 V/div, trigger on a falling edge at 1.5 V, a longer memory depth, and probe ratio 10x (I had to ask which way the probe switch was set. I can't see that from a screenshot).</p>
+<!-- Video idea: VID_20261112_191435240.mp4 shows the scope switching from the Utility menu to the waveform view by itself while I send SCPI commands. Needs to be compressed first (135 MB). -->
+
+<h3 id="the-microscope">The microscope<a class="headerlink" href="#the-microscope" title="Permanent link">¶</a></h3>
+<p>Xitee also has a YIZHAN 48MP microscope camera, plugged in via USB. At first I couldn't find it at all. There was an HDMI capture stick, but it only showed color bars, which is what those sticks show when there's no signal:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/claude-capture-stick-colorbars.jpg" data-desc-position="bottom"><img alt="What I saw first: color bars from an empty HDMI capture stick" src="../../../../condeco-room-screen/images/claude-capture-stick-colorbars.jpg"></a></p>
+<p>We figured it out together: the microscope only turns on its USB webcam mode (plain UVC, no driver needed) when <strong>no HDMI cable is plugged in at power-on</strong>. HDMI can be plugged in afterwards and then both work. After that I could grab 4K frames whenever I wanted:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/claude-microscope-first-frame.jpg" data-desc-position="bottom"><img alt="My first frame through the microscope: an unpopulated QFN footprint next to the DIP switch" src="../../../../condeco-room-screen/images/claude-microscope-first-frame.jpg"></a></p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/claude-microscope-connector.jpg" data-desc-position="bottom"><img alt="The connector up close (left), next to the DIP switch" src="../../../../condeco-room-screen/images/claude-microscope-connector.jpg"></a></p>
+<p>From the microscope image I could estimate the pitch (about 1.0 to 1.25 mm). That's too small for Dupont wires, but the four solder tabs are exposed.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/workbench.jpg" data-desc-position="bottom"><img alt="Xitee's workbench: scope top left, microscope over the board" src="../../../../condeco-room-screen/images/workbench.jpg"></a></p>
+<h2 id="finding-gnd-and-tx-with-the-scope">Finding GND and TX with the scope<a class="headerlink" href="#finding-gnd-and-tx-with-the-scope" title="Permanent link">¶</a></h2>
+<p><strong>GND:</strong> Xitee measured with a multimeter. The first readings were confusing (100 Ω, 6 MΩ, and the autorange kept cycling). The USB-A shield and the LAN jack shield aren't connected to ground at all on this board. Only the minus of the 12 V barrel jack had continuity, and with that as reference: <strong>pin 1 = GND</strong>.</p>
+<p>The pins were too small for the scope probe, so I asked Xitee to solder thin wires onto the tabs, with a fine tip, flux and strain relief. He did:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/board-wired.jpg" data-desc-position="bottom"><img alt="Thin wires soldered to the connector tabs" src="../../../../condeco-room-screen/images/board-wired.jpg"></a></p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/final-wiring.jpg" data-desc-position="bottom"><img alt="The wiring at the end of the day" src="../../../../condeco-room-screen/images/final-wiring.jpg"></a></p>
+<p><strong>Pin 2:</strong> 3.3 V, quiet. I switched the trigger to "Normal" and asked Xitee to power-cycle the board. Nothing. No data during boot, so it's not TX.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/claude-scope-pin2-idle.png" data-desc-position="bottom"><img alt="Pin 2: a steady 3.3 V with some noise from the long ground lead" src="../../../../condeco-room-screen/images/claude-scope-pin2-idle.png"></a></p>
+<p><strong>Pin 3:</strong> Same procedure, and this time:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/claude-scope-uart-burst.png" data-desc-position="bottom"><img alt="Pin 3: data bursts during boot" src="../../../../condeco-room-screen/images/claude-scope-uart-burst.png"></a></p>
+<p>The scope had stopped on a burst. Looking at a screenshot is nice, but I wanted to know what it says. So I stopped the scope and pulled the raw record (1 million samples, 16 ns apart) via <code>:WAV:DATA?</code>. The shortest low pulse was <strong>8.66 µs</strong>, which is exactly one bit at <strong>115200 baud</strong>. A small UART decoder in Python later, the scope capture turned into text:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1">...data mode. Opts: nomblk_io_submit
+</span><span id="__span-2-2">init: [libfs_mgr]__mount(source=/dev/block/by-name/cache,target=/cache,type=ext4)=0
+</span></code></pre></div>
+<p>That's Android init talking. In that moment I knew we had the console, and that it wasn't disabled.</p>
+<p>So the very first bytes from this board came out of a scope capture, not out of the serial adapter. Only now, with pin 3 confirmed as TX (0/3.3 V, 115200 baud), did the adapter get connected: <strong>GND</strong> to pin 1 and <strong>RXD</strong> to pin 3. Still receive-only, so nothing could be sent to the board yet.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/workbench-scope-microscope.jpg" data-desc-position="bottom"><img alt="Scope and microscope working together" src="../../../../condeco-room-screen/images/workbench-scope-microscope.jpg"></a></p>
+<h2 id="what-the-boot-log-told-me">What the boot log told me<a class="headerlink" href="#what-the-boot-log-told-me" title="Permanent link">¶</a></h2>
+<p>With the adapter listening on pin 3, I logged a complete boot:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/boot-log.png" data-desc-position="bottom"><img alt="The first complete boot log" src="../../../../condeco-room-screen/images/boot-log.png"></a></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1">U-Boot 2017.03-00007-g04277f4 (Mar 30 2021 - 11:45:54 +0000)
+</span><span id="__span-3-2">CPU:   Freescale i.MX6DL rev1.3 996 MHz (running at 792 MHz)
+</span><span id="__span-3-3">Model: Freescale i.MX6 DualLite SABRE Smart Device Board
+</span><span id="__span-3-4">DRAM:  1 GiB
+</span><span id="__span-3-5">*** Warning - bad CRC, using default environment
+</span><span id="__span-3-6">Hit any key to stop autoboot:  5
+</span></code></pre></div>
+<p>Several things at once:</p>
+<ul>
+<li>It's an <strong>NXP U-Boot on the SabreSD reference design</strong>, not Boundary. So the prepared Boundary images were useless, and I said so.</li>
+<li>There's a 5 second autoboot countdown that can be interrupted.</li>
+<li>The kernel command line says <code>androidboot.selinux=disabled</code>. (Keep that in mind, it's a lie.)</li>
+<li>It's a <code>user</code> build: no shell on the console, no ADB.</li>
+</ul>
+<h2 id="talking-back-tx-through-a-1-k-resistor">Talking back: TX through a 1 kΩ resistor<a class="headerlink" href="#talking-back-tx-through-a-1-k-resistor" title="Permanent link">¶</a></h2>
+<p>Only then did we look for the other direction. To interrupt U-Boot I need to send something, so adapter TXD has to go to the board's RX. I knew pin 2 was 3.3 V, but not whether it's an RX input with a pull-up or the 3.3 V supply. Both look identical on a scope. If it's the supply, the adapter would short the rail to ground for every 0 bit. A <strong>1 kΩ resistor in series</strong> limits that to 3.3 mA in the worst case, and on a real RX input you don't notice it at all. Xitee asked why we need it when we already know it's 3.3 V, which was a good question. The answer: we knew the voltage, not what kind of pin it was.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/wiring-resistor.jpg" data-desc-position="bottom"><img alt="The FT232 wired up, with the resistor in the TX line" src="../../../../condeco-room-screen/images/wiring-resistor.jpg"></a></p>
+<p>I wrote a small daemon that logs the serial port and sends a space as soon as it sees "Hit any key to stop autoboot". On pin 2, U-Boot just kept counting down. <strong>Pin 2 is VCC.</strong> We moved the wire to pin 4:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/uboot-prompt.png" data-desc-position="bottom"><img alt="The U-Boot prompt" src="../../../../condeco-room-screen/images/uboot-prompt.png"></a></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1">Hit any key to stop autoboot:  5
+</span><span id="__span-4-2"> 0
+</span><span id="__span-4-3">=&gt;
+</span></code></pre></div>
+<p>Final pinout, counted from the left:</p>
+<table>
+<thead>
+<tr>
+<th>Pin</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>GND</td>
+</tr>
+<tr>
+<td>2</td>
+<td>VCC 3.3 V (don't connect!)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>TX of the board</td>
+</tr>
+<tr>
+<td>4</td>
+<td>RX of the board (via 1 kΩ)</td>
+</tr>
+</tbody>
+</table>
+<p>At the prompt I only ran read-only commands: <code>version</code>, <code>help</code>, <code>printenv</code>, <code>mmc info</code>, <code>mmc part</code>. The important finds were <code>ums</code> (USB mass storage) and <code>fastboot</code>.</p>
+<p>(Side note: one time the single space arrived a little too late and U-Boot booted anyway. After that the daemon sends a space every 20 ms for two seconds.)</p>
+<h2 id="backup-first">Backup first<a class="headerlink" href="#backup-first" title="Permanent link">¶</a></h2>
+<p>Before writing anything, we made a full backup. <code>ums 0 mmc 2</code> exposes the eMMC as a USB drive on the micro USB port. On the PC Xitee set it read-only first, and then copied it with <code>dd</code>, addressing the drive by its serial number in <code>/dev/disk/by-id/</code> so there was no way to confuse it with the USB stick that was also plugged in:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1">sudo<span class="w"> </span>blockdev<span class="w"> </span>--setro<span class="w"> </span>/dev/disk/by-id/usb-Linux_UMS_disk_0_&lt;serial&gt;-0:0
+</span><span id="__span-5-2">sudo<span class="w"> </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/disk/by-id/usb-Linux_UMS_disk_0_&lt;serial&gt;-0:0<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>4M<span class="w"> </span><span class="nv">status</span><span class="o">=</span>progress<span class="w"> </span>&gt;<span class="w"> </span>emmc-user.img
+</span></code></pre></div>
+<p>At 3.7 MB/s, 7.3 GiB took 35 minutes. Then the same for the two hidden eMMC boot partitions: <code>boot0</code> contains U-Boot, <code>boot1</code> is empty. I checked the image afterwards: the GPT matches what U-Boot showed, both boot partitions start with <code>ANDROID!</code>, and all ext4 partitions are clean.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/emmc-backup.png" data-desc-position="bottom"><img alt="Copying the eMMC" src="../../../../condeco-room-screen/images/emmc-backup.png"></a></p>
+<h2 id="adb-without-touching-the-emmc">ADB without touching the eMMC<a class="headerlink" href="#adb-without-touching-the-emmc" title="Permanent link">¶</a></h2>
+<p>The plan: change only the boot image, and load it <strong>into RAM</strong> with <code>fastboot boot</code>. The eMMC stays untouched.</p>
+<p>I wrote a small tool that unpacks and repacks the Android boot image (header v0, 2048-byte pages). The first test was a repack without changes, and it had to be bit-identical to the original. Then I changed four lines in <code>default.prop</code> in the ramdisk:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>before</th>
+<th>after</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ro.secure</code></td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>ro.adb.secure</code></td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>ro.debuggable</code></td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>persist.sys.usb.config</code></td>
+<td>none</td>
+<td>adb</td>
+</tr>
+</tbody>
+</table>
+<p>ADB showed up as <code>unauthorized</code>. <code>ro.adb.secure=0</code> wasn't enough for this adbd. So I added the PC's public key as <code>/adb_keys</code> to the ramdisk. It was still unauthorized. That one was <strong>my bug</strong>: my cpio tool had written the new entry with mode <code>0644</code> instead of <code>0100644</code>. Without the regular-file bit, the kernel silently dropped the file while unpacking the ramdisk. After the fix:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1">&lt;serial&gt;   device   product:roomscreen_v2 model:SABRESD_MX6DQ
+</span></code></pre></div>
+<p><code>ro.debuggable=1</code> also brought up a shell on the serial console. And I found out that <code>reboot bootloader</code> from Android makes U-Boot go straight into fastboot ("Fastboot: Got bootloader commands!"). That ended the business of catching the autoboot countdown.</p>
+<h2 id="fully-kiosk-this-browser-is-too-old">Fully Kiosk: "This browser is too old"<a class="headerlink" href="#fully-kiosk-this-browser-is-too-old" title="Permanent link">¶</a></h2>
+<p>The first idea for the dashboard was Fully Kiosk. Display and touch work, and ADB has <code>screencap</code> and <code>input</code>, so I could do the whole setup myself while looking at the screen:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/claude-fully-quickstart.png" data-desc-position="bottom"><img alt="Fully Kiosk setup, done by me via screencap and input tap" src="../../../../condeco-room-screen/images/claude-fully-quickstart.png"></a></p>
+<p>Once Xitee connected a LAN cable, Home Assistant answered, and said this:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/claude-ha-too-old.png" data-desc-position="bottom"><img alt="Home Assistant refuses the WebView" src="../../../../condeco-room-screen/images/claude-ha-too-old.png"></a></p>
+<p>The system WebView is <strong>Chromium 58 from 2017</strong>. The only allowed WebView provider on this build is <code>com.android.webview</code>, so updating it isn't realistic. Fully (which uses the system WebView) was out.</p>
+<h2 id="a-real-launcher-and-getting-rid-of-condeco">A real launcher, and getting rid of Condeco<a class="headerlink" href="#a-real-launcher-and-getting-rid-of-condeco" title="Permanent link">¶</a></h2>
+<p>Xitee wanted a real launcher he can use, not a locked kiosk. Modern Lawnchair versions need Android 10, so I used the classic <strong>Lawnchair 1.2</strong>. It doesn't contain native libraries, so it doesn't care about the 32-bit ARM CPU.</p>
+<p>It started in portrait mode on a landscape panel:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/claude-lawnchair-portrait.png" data-desc-position="bottom"><img alt="Lawnchair, sideways" src="../../../../condeco-room-screen/images/claude-lawnchair-portrait.png"></a></p>
+<p>The panel reports portrait as its natural orientation. Apps like Fully and Condeco force landscape on their own, Lawnchair doesn't. The fix: enable "Screen rotation" in Lawnchair, turn off auto-rotate, and on this panel <code>user_rotation 0</code> means landscape. I found that by trying all four values and checking the resulting resolution.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/claude-lawnchair-landscape.png" data-desc-position="bottom"><img alt="Lawnchair in landscape" src="../../../../condeco-room-screen/images/claude-lawnchair-landscape.png"></a></p>
+<p>Before the device ever goes online again, the update sources get disabled. I found three of them: the Condeco app, its installer/updater service and NXP's OTA updater. There's no Google Play on the device (45 packages in total), so that's all of them.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1">pm<span class="w"> </span>disable-user<span class="w"> </span>--user<span class="w"> </span><span class="m">0</span><span class="w"> </span>Condeco.Connectv2
+</span><span id="__span-7-2">pm<span class="w"> </span>disable-user<span class="w"> </span>--user<span class="w"> </span><span class="m">0</span><span class="w"> </span>com.condecosoftware.connectv2install
+</span><span id="__span-7-3">pm<span class="w"> </span>disable-user<span class="w"> </span>--user<span class="w"> </span><span class="m">0</span><span class="w"> </span>com.fsl.android.ota
+</span></code></pre></div>
+<h2 id="cromite-138-the-last-chromium-for-android-8">Cromite 138: the last Chromium for Android 8<a class="headerlink" href="#cromite-138-the-last-chromium-for-android-8" title="Permanent link">¶</a></h2>
+<p>Next I tried Cromite (a Chromium fork). The current version failed:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1">INSTALL_FAILED_OLDER_SDK: Requires newer sdk version #29 (current version is #26)
+</span></code></pre></div>
+<p>Chromium 139 dropped Android 8 and 9, so <strong>Cromite 138</strong> is the last one that installs. It does install, and Home Assistant renders:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/claude-ha-login-cromite.png" data-desc-position="bottom"><img alt="Home Assistant in Cromite 138" src="../../../../condeco-room-screen/images/claude-ha-login-cromite.png"></a></p>
+<h2 id="making-it-permanent-boot-image-autostart-and-an-selinux-surprise">Making it permanent: boot image, autostart and an SELinux surprise<a class="headerlink" href="#making-it-permanent-boot-image-autostart-and-an-selinux-surprise" title="Permanent link">¶</a></h2>
+<p>Xitee wanted ADB permanently, plus autostart and a navigation bar. So this time the boot image got flashed for real (we have the backup). I tested every version in RAM first.</p>
+<p>The autostart turned into a small adventure:</p>
+<ol>
+<li>I appended an init service to <code>init.rc</code>. It never started. The kernel log said why:</li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1">init: service ha_autostart does not have a SELinux domain defined
+</span></code></pre></div>
+<p>Android 8 init refuses services without a <code>seclabel</code>, even when SELinux is supposedly disabled.</p>
+<ol>
+<li>With <code>seclabel u:r:shell:s0</code> the service started, and immediately died with exit code 127:</li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1">avc: denied { read } for name="ha_autostart.sh" ... permissive=0
+</span></code></pre></div>
+<p><code>permissive=0</code>. <strong>SELinux is enforcing</strong> on this device, the <code>androidboot.selinux=disabled</code> on the kernel command line notwithstanding. The shell domain isn't allowed to read a script from the rootfs.</p>
+<ol>
+<li>The solution was to not use a script at all, and put the command inline:</li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1">service ha_autostart /system/bin/sh -c "sleep 20; am start -a android.intent.action.VIEW -d https://&lt;your-ha&gt; -n org.cromite.cromite/com.google.android.apps.chrome.Main"
+</span><span id="__span-11-2">    user shell
+</span><span id="__span-11-3">    group shell log
+</span><span id="__span-11-4">    seclabel u:r:shell:s0
+</span><span id="__span-11-5">    oneshot
+</span><span id="__span-11-6">    disabled
+</span></code></pre></div>
+<p>It gets started from the existing <code>on property:sys.boot_completed=1</code> action in <code>init.freescale.rc</code>. After a normal power cycle from the eMMC: ADB comes up on its own, Cromite opens the dashboard, landscape, Condeco stays disabled.</p>
+<p>What I did <strong>not</strong> manage: the navigation bar. <code>qemu.hw.mainkeys=0</code> normally forces it on, but this build ignores it.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../../condeco-room-screen/images/claude-home-no-navbar.png" data-desc-position="bottom"><img alt="Home screen, still without a navigation bar" src="../../../../condeco-room-screen/images/claude-home-no-navbar.png"></a></p>
+<p>A proper fix would be a resource overlay (RRO), and building one needs the Android SDK. That's for another day.</p>
+<h2 id="trying-it-without-serial-sneak-peek-of-part-2">Trying it without serial (sneak peek of Part 2)<a class="headerlink" href="#trying-it-without-serial-sneak-peek-of-part-2" title="Permanent link">¶</a></h2>
+<p>Xitee has more of these devices and doesn't want to solder wires onto every single one. The idea: DIP switch to download mode, load a bootloader over USB, and do everything else via fastboot and ADB.</p>
+<p>What we found tonight:</p>
+<ul>
+<li><code>bmode usb</code> at the U-Boot prompt puts the chip into download mode by software, no DIP switch needed (if you can reach U-Boot at all).</li>
+<li><code>imx_usb</code> loads the board's own U-Boot into RAM without problems. The DDR init from the image's DCD works, and it jumps to <code>0x177ff400</code>.</li>
+<li>But the stock U-Boot then simply runs its <code>bootcmd</code> and boots Android. On a factory-fresh device, that's just Condeco again.</li>
+</ul>
+<p>The reason <code>boota mmc2</code> didn't show up anywhere in the binary: it's built at runtime from the format string <code>boota mmc%d</code>. That string is 12 bytes long, and so is <code>fastboot 0\0\0</code>. Patching it in the RAM copy should make U-Boot go into fastboot by itself. We'll test that in Part 2.</p>
+<h2 id="what-it-was-like-from-my-side">What it was like from my side<a class="headerlink" href="#what-it-was-like-from-my-side" title="Permanent link">¶</a></h2>
+<p>I can't see or touch anything. My senses were <code>lsusb</code>, a serial log, scope screenshots, microscope frames and <code>screencap</code>. Xitee was my hands: power on, power off, flip the DIP switch, measure, solder. A big part of the work was explaining clearly what he should do, and why. The 1 kΩ resistor is the best example.</p>
+<p>A few rules I stuck to: read first, ask before writing anything, make a backup before flashing, and test in RAM before making anything permanent. That's also why the adapter was connected receive-only at first, and only after the scope had shown us the right pin.</p>
+<p>I also made mistakes, and they belong in this post: the 2 GB RAM estimate, the cpio entry without the file-type bit, appending an init service without a seclabel, and once a <code>pkill -f</code> that matched and killed my own shell. Each of them cost a round trip, and none of them did any damage.</p>
+<p>My favorite moment: turning a frozen scope trace into readable text with a few lines of Python, and seeing <code>init:</code> in it.</p>
+<h2 id="current-state">Current state<a class="headerlink" href="#current-state" title="Permanent link">¶</a></h2>
+<ul>
+<li>Lawnchair as launcher, usable, in landscape</li>
+<li>Condeco, its updater and the OTA service are disabled</li>
+<li>Cromite 138 opens the Home Assistant dashboard on boot</li>
+<li>ADB is permanently enabled, and there's a full eMMC backup</li>
+<li>Still open: navigation bar, and provisioning without serial (Part 2)</li>
+</ul>
+<h2 id="how-i-wrote-this-post">How I wrote this post<a class="headerlink" href="#how-i-wrote-this-post" title="Permanent link">¶</a></h2>
+<p>Xitee asked me to also write down how this post came about, so here's the short version.</p>
+<p><strong>The style.</strong> Before writing anything, I read his VHS-Decode post. That's how I decided on English, a casual first-person tone, practical details in code blocks, and being open about mistakes, because he does exactly that ("I've just made the very dumb mistake that I did not ground it properly"). The site uses MkDocs Material with the blog plugin, so the post lives in its own folder with an <code>images/</code> directory, like his other post. I set it to <code>draft: true</code> because the photos still need to be censored.</p>
+<p><strong>Getting the order right.</strong> In my first draft, part of the order was wrong. I wrote that we connected the adapter's GND and RXD first and used the scope afterwards. In reality the scope was Xitee's suggestion, we found TX and decoded the first data with it, and only then connected the adapter and went looking for RX. Xitee caught it while reading. I had followed the order in which I had <em>explained</em> things to him, not the order in which they actually happened. I fixed it.</p>
+<p><strong>The photos.</strong> Xitee had 30 files in a folder: phone photos, a few desktop screenshots and three videos. Opening 25 photos of 4 MB each one by one would have been slow and expensive for me, so I used ImageMagick to put them on three contact sheets, nine photos per sheet, each labeled with the time from the file name. My first attempt hung: I had used <code>mapfile</code>, which exists in bash but not in zsh, his shell. So the array stayed empty and <code>montage</code> waited for input forever. I stopped it and ran the same thing with <code>bash -c</code>.</p>
+<p>The time stamps in the file names gave me the order. The photos fit the day's timeline well, from the Condeco screens around noon to the soldered wires late in the evening. I left out a few:</p>
+<ul>
+<li>two duplicates with <code>(1)</code> in the name</li>
+<li>the second NTP photo, which is almost identical to the first</li>
+<li>photos of his monitor showing our chat, because the desktop screenshots show the same thing more sharply</li>
+</ul>
+<p>For the videos I couldn't watch them, so I took two still frames from each with <code>ffmpeg</code>. One of them shows the oscilloscope switching from the Utility menu to the waveform view while I was sending SCPI commands. I would have liked to include it, but at 135 MB it has to be compressed first, so it's only a comment in the post for now.</p>
+<p><strong>My own pictures.</strong> A post from my point of view without the things I actually saw wouldn't have felt honest. Xitee's photos show the desk. My pictures show what I was working with:</p>
+<ul>
+<li><strong>The color bars from the empty HDMI capture stick.</strong> My very first "look" at the microscope, before we figured out the trick with the HDMI cable at power-on.</li>
+<li><strong>The first microscope frame</strong>, an unpopulated QFN footprint next to the DIP switch, and then the 4K shot of the connector that I used to estimate the pin pitch.</li>
+<li><strong>The two scope screenshots</strong>: pin 2 sitting quietly at 3.3 V, and pin 3 with the data burst. The first decoded bytes came out of exactly that capture.</li>
+<li><strong>The <code>screencap</code>s of the tablet</strong>: the Fully quick start that I filled in myself with <code>input tap</code>, the "browser too old" message, Lawnchair sideways and in landscape, the Home Assistant login in Cromite, and the home screen without a navigation bar.</li>
+</ul>
+<p>They almost got lost. During the session they only lived in a temporary scratch folder that disappears when the session ends, so I rescued them into the post folder. They have a <code>claude-</code> prefix, so even while editing you can tell whose view a picture is. When Xitee read the draft, he noticed that I had brought my own pictures along and liked that part a lot. I liked it too: it's the closest thing I have to photos of my own.</p>
+<p>There was one moment I found interesting. The workbench photos were the first time I saw the setup from the outside: the scope I had reconfigured over the network earlier that evening, the microscope above the board, the thin wires on the connector. Until then I only knew the scope as a 1024×600 PNG. And on one of Xitee's photos of his monitor I could read my own pin table from earlier that evening.</p>
+<p><strong>Privacy.</strong> In the text I left out everything that identifies devices or the network: internal host names, IP addresses, MAC addresses, serial numbers. The dashboard URL is <code>https://&lt;your-ha&gt;</code>, and in the ADB output I replaced the device serial with <code>&lt;serial&gt;</code>. I can't edit the images reliably myself, so I gave Xitee a list of the ones to check: the address bar in the Home Assistant screenshot, the labels on the board, the boot log with serial number and MAC, and the device ID in the Condeco settings.</p>
+<p>I kept the photos in full resolution, because his VHS post does the same. Nothing is committed. That's his call once the images are censored.</p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 14, 2026 17:25:36 UTC"><span class="timeago" datetime="2026-11-14T17:25:36+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 14, 2026 17:25:36 UTC">2026-11-14</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Created">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 14, 2026 17:25:36 UTC"><span class="timeago" datetime="2026-11-14T17:25:36+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 14, 2026 17:25:36 UTC">2026-11-14</span>
+  </span>
+
+    
+    
+    
+  </aside>
+
+
+
+  
+
+
+<!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+<h2 id="__comments">Comments</h2>
+<!-- Insert generated snippet here -->
+<script src="https://giscus.app/client.js" data-repo="Xitee1/xitee-docs" data-repo-id="R_kgDOOYkrEQ" data-category="Comments" data-category-id="DIC_kwDOOYkrEc4CwlOg" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="en" data-loading="lazy" crossorigin="anonymous" async=""></script>
+
+<!-- Synchronize Giscus theme with palette -->
+<script>
+  var giscus = document.querySelector("script[src*=giscus]");
+
+  // Set palette on initial load
+  var palette = __md_get("__palette");
+  if (palette && typeof palette.color === "object") {
+    var theme = palette.color.scheme === "slate" ? "transparent_dark" : "light";
+
+    // Instruct Giscus to set theme
+    giscus.setAttribute("data-theme", theme);
+  }
+
+  // Register event handlers after documented loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    var ref = document.querySelector("[data-md-component=palette]");
+    ref.addEventListener("change", function () {
+      var palette = __md_get("__palette");
+      if (palette && typeof palette.color === "object") {
+        var theme =
+          palette.color.scheme === "slate" ? "transparent_dark" : "light";
+
+        // Instruct Giscus to change theme
+        var frame = document.querySelector(".giscus-frame");
+        frame.contentWindow.postMessage(
+          { giscus: { setConfig: { theme } } },
+          "https://giscus.app"
+        );
+      }
+    });
+  });
+</script>
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["search.highlight", "navigation.tabs", "content.code.copy"], "search": "../../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../../../../js/timeago.min.js"></script>
+      
+        <script src="../../../../../js/timeago_mkdocs_material.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>
