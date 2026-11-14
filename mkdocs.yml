@@ -5,17 +5,23 @@ site_author: Xitee
 theme:
   name: material
   custom_dir: overrides
+  logo: assets/images/avatar.jpg
+  favicon: assets/images/favicon.png
   features:
     - search.highlight
     - navigation.tabs
     - content.code.copy
   palette:
     - scheme: slate
+      primary: custom
+      accent: custom
       toggle:
         icon: material/weather-sunny
         text: Toggle dark mode
 
     - scheme: default
+      primary: custom
+      accent: custom
       toggle:
         icon: material/weather-night
         text: Toggle light mode
