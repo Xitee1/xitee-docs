@@ -1,0 +1,41 @@
+{#- Blog list entry rendered as a card: cover image, title, meta, description -#}
+{#- Cover image: first image of the rendered post, paths already resolved by MkDocs -#}
+{% set image = none %}
+{% set parts = post.content.split("<img", 1) %}
+{% if parts | length > 1 and 'src="' in parts[1] %}
+  {% set image = parts[1].split('src="', 1)[1].split('"')[0] %}
+{% endif %}
+{% set title = post.post.title %}
+<article class="post-card">
+  <a href="{{ post.url | url }}" class="post-card__link">
+    <div class="post-card__image">
+      {% if image %}
+        <img src="{{ image }}" alt="" loading="lazy">
+      {% endif %}
+    </div>
+    <div class="post-card__body">
+      <div class="post-card__meta">
+        <time datetime="{{ post.config.date.created }}">
+          {{- post.config.date.created | date -}}
+        </time>
+        {% if post.config.readtime %}
+          {% set time = post.config.readtime %}
+          <span>
+            {% if time == 1 %}
+              {{ lang.t("readtime.one") }}
+            {% else %}
+              {{ lang.t("readtime.other") | replace("#", time) }}
+            {% endif %}
+          </span>
+        {% endif %}
+        {% if post.config.draft %}
+          <span class="md-draft">{{ lang.t("blog.draft") }}</span>
+        {% endif %}
+      </div>
+      <h2 class="post-card__title">{{ title }}</h2>
+      {% if post.meta.description %}
+        <p class="post-card__text">{{ post.meta.description }}</p>
+      {% endif %}
+    </div>
+  </a>
+</article>
