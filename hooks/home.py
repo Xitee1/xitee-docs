@@ -6,6 +6,9 @@ The home page template (overrides/home.html) reads these context variables:
 - docs_categories: top-level sections of the "Docs" navigation entry
 - projects: GitHub repositories listed under `extra.projects` in mkdocs.yml;
   their live data is loaded in the browser by javascripts/projects.js
+
+The Jinja filter `cover_image` returns the cover image of a blog post as site URL.
+The cover is the `cover` metadata entry of the post, otherwise its first image.
 """
 
 from __future__ import annotations
@@ -39,6 +42,11 @@ def on_files(files, config):
     return files
 
 
+def on_env(env, config, files):
+    env.filters["cover_image"] = _cover_image
+    return env
+
+
 def on_page_context(context, page, config, nav):
     if not page.is_homepage:
         return context
@@ -59,25 +67,39 @@ def _latest_posts(page, config):
             "url": get_relative_url(post.url, page.url),
             "date": post.config.date.created,
             "draft": bool(post.config.draft),
-            "image": _cover_image(post, page),
+            "image": _relative_url(_cover_image(post), page),
         }
         for post in blog.posts[:LATEST_POSTS]
     ]
 
 
-def _cover_image(post, page):
-    """Return the URL of the first image in the post, relative to the home page."""
-    match = IMAGE_PATTERN.search(post.markdown)
-    if not match:
-        return None
-    src = match.group(1)
+def _cover_image(post):
+    """Return the cover image of a blog post as site URL, or None without image.
+
+    Paths in the `cover` metadata entry are relative to the post file, like image links.
+    """
+    post = getattr(post, "post", post)  # excerpts in blog views wrap their post
+    src = post.meta.get("cover")
+    if not src:
+        match = IMAGE_PATTERN.search(post.markdown)
+        if not match:
+            return None
+        src = match.group(1)
     if "://" in src:
         return src
     path = posixpath.normpath(posixpath.join(posixpath.dirname(post.file.src_uri), src))
     file = _files.get_file_from_path(path)
     if file is None:
+        if post.meta.get("cover"):
+            raise PluginError(f'home hook: cover image "{src}" of "{post.file.src_uri}" not found')
         return None
-    return get_relative_url(file.url, page.url)
+    return file.url
+
+
+def _relative_url(url, page):
+    if url is None or "://" in url:
+        return url
+    return get_relative_url(url, page.url)
 
 
 # Docs categories -------------------------------------------------------------

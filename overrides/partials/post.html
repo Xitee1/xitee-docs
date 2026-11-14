@@ -1,16 +1,12 @@
 {#- Blog list entry rendered as a card: cover image, title, meta, description -#}
-{#- Cover image: first image of the rendered post, paths already resolved by MkDocs -#}
-{% set image = none %}
-{% set parts = post.content.split("<img", 1) %}
-{% if parts | length > 1 and 'src="' in parts[1] %}
-  {% set image = parts[1].split('src="', 1)[1].split('"')[0] %}
-{% endif %}
+{#- Cover image: `cover` metadata entry or first image of the post (hooks/home.py) -#}
+{% set image = post | cover_image %}
 {% set title = post.post.title %}
 <article class="post-card">
   <a href="{{ post.url | url }}" class="post-card__link">
     <div class="post-card__image">
       {% if image %}
-        <img src="{{ image }}" alt="" loading="lazy">
+        <img src="{{ image | url }}" alt="" loading="lazy">
       {% endif %}
     </div>
     <div class="post-card__body">
