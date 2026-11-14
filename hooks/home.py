@@ -4,25 +4,18 @@ The home page template (overrides/home.html) reads these context variables:
 
 - latest_posts: newest blog posts with title, date, URL and cover image
 - docs_categories: top-level sections of the "Docs" navigation entry
-- projects: GitHub repositories listed under `extra.projects` in mkdocs.yml
+- projects: GitHub repositories listed under `extra.projects` in mkdocs.yml;
+  their live data is loaded in the browser by javascripts/projects.js
 """
 
 from __future__ import annotations
 
-import json
-import logging
-import os
 import posixpath
 import re
-import time
-import urllib.request
-from pathlib import Path
 
 from mkdocs.exceptions import PluginError
 from mkdocs.structure.nav import Section
 from mkdocs.utils import get_relative_url
-
-log = logging.getLogger("mkdocs.hooks.home")
 
 LATEST_POSTS = 3
 DOCS_SECTION = "Docs"
@@ -34,26 +27,6 @@ CATEGORY_ICONS = {
     "Tools and scripts": "material/tools",
 }
 DEFAULT_CATEGORY_ICON = "material/folder-outline"
-
-CACHE_FILE = Path(".cache/home/github-projects.json")
-CACHE_MAX_AGE = 3600
-GITHUB_API = "https://api.github.com/repos/"
-
-LANGUAGE_COLORS = {
-    "C": "#555555",
-    "C++": "#f34b7d",
-    "CSS": "#563d7c",
-    "Go": "#00add8",
-    "HTML": "#e34c26",
-    "Java": "#b07219",
-    "JavaScript": "#f1e05a",
-    "Kotlin": "#a97bff",
-    "Python": "#3572a5",
-    "Rust": "#dea584",
-    "Shell": "#89e051",
-    "TypeScript": "#3178c6",
-}
-DEFAULT_LANGUAGE_COLOR = "#8b949e"
 
 IMAGE_PATTERN = re.compile(r"!\[[^\]]*\]\(\s*<?([^)\s>]+)")
 
@@ -149,48 +122,17 @@ def _first_page(section):
 
 
 def _projects(names):
-    if not names:
-        return []
-    cached = _read_cache()
-    if cached is not None and [repo["full_name"] for repo in cached] == names:
-        return cached
-    projects = [_fetch_repo(name) for name in names]
-    CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
-    CACHE_FILE.write_text(json.dumps(projects), encoding="utf-8")
-    log.info("home hook: GitHub projects fetched: %d", len(projects))
+    """Return the configured repositories. Description, language, stars and forks
+    are loaded live in the browser by javascripts/projects.js."""
+    projects = []
+    for name in names:
+        owner, repo = name.split("/", 1)
+        projects.append(
+            {
+                "full_name": name,
+                "owner": owner,
+                "name": repo,
+                "url": f"https://github.com/{name}",
+            }
+        )
     return projects
-
-
-def _read_cache():
-    if not CACHE_FILE.exists():
-        return None
-    if time.time() - CACHE_FILE.stat().st_mtime > CACHE_MAX_AGE:
-        return None
-    return json.loads(CACHE_FILE.read_text(encoding="utf-8"))
-
-
-def _fetch_repo(name):
-    request = urllib.request.Request(GITHUB_API + name)
-    request.add_header("Accept", "application/vnd.github+json")
-    request.add_header("User-Agent", "xitee-docs-build")
-    token = os.environ.get("GITHUB_TOKEN")
-    if token:
-        request.add_header("Authorization", f"Bearer {token}")
-    try:
-        with urllib.request.urlopen(request, timeout=15) as response:
-            data = json.load(response)
-    except OSError as error:
-        raise PluginError(f"home hook: GitHub repository {name} not fetched: {error}") from error
-    language = data.get("language")
-    return {
-        # Keep the configured spelling, so the cache comparison stays stable
-        "full_name": name,
-        "name": data["name"],
-        "url": data["html_url"],
-        "description": data.get("description") or "",
-        "language": language,
-        "language_color": LANGUAGE_COLORS.get(language, DEFAULT_LANGUAGE_COLOR),
-        "stars": data.get("stargazers_count", 0),
-        "forks": data.get("forks_count", 0),
-        "owner": data["owner"]["login"],
-    }

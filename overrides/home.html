@@ -64,26 +64,28 @@
       </div>
       <div class="home-grid home-grid--projects">
         {% for repo in projects %}
-          <a href="{{ repo.url }}" class="repo-card">
+          {#- Description, language, stars and forks are filled in by javascripts/projects.js -#}
+          <a href="{{ repo.url }}" class="repo-card" data-repo="{{ repo.full_name }}">
             <span class="repo-card__name">
               {% include ".icons/octicons/repo-16.svg" %}
               <span>{% if repo.owner != "Xitee1" %}<span class="repo-card__owner">{{ repo.owner }}/</span>{% endif %}{{ repo.name }}</span>
             </span>
-            <span class="repo-card__text">{{ repo.description }}</span>
+            <span class="repo-card__text" data-field="description"></span>
             <span class="repo-card__meta">
-              {% if repo.language %}
-                <span><span class="repo-card__dot" style="background-color: {{ repo.language_color }}"></span>{{ repo.language }}</span>
-              {% endif %}
-              {% if repo.stars %}
-                <span>{% include ".icons/octicons/star-16.svg" %}{{ repo.stars }}</span>
-              {% endif %}
-              {% if repo.forks %}
-                <span>{% include ".icons/octicons/repo-forked-16.svg" %}{{ repo.forks }}</span>
-              {% endif %}
+              <span data-field="language" hidden><span class="repo-card__dot"></span><span data-value></span></span>
+              <span data-field="stars" hidden>{% include ".icons/octicons/star-16.svg" %}<span data-value></span></span>
+              <span data-field="forks" hidden>{% include ".icons/octicons/repo-forked-16.svg" %}<span data-value></span></span>
             </span>
           </a>
         {% endfor %}
       </div>
     </section>
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {% if projects %}
+    <script src="{{ 'javascripts/projects.js' | url }}"></script>
   {% endif %}
 {% endblock %}

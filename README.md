@@ -1,6 +1,6 @@
 # Welcome!
 
-Visit the page here: https://xitee1.github.io/
+Visit the page here: https://docs.xitma.de/
 
 ## Development setup
 1. Clone the repo
@@ -19,12 +19,12 @@ You can run the site using Docker. The image is built automatically via GitHub A
 To build the Docker image locally:
 
 ```bash
-docker build -t xitee1.github.io:local .
+docker build -t xitee-docs:local .
 ```
 
 Then run the container:
 ```bash
-docker run -p 8080:80 xitee1.github.io:local
+docker run -p 8080:80 xitee-docs:local
 ```
 
 Visit http://localhost:8080 to view the site.
@@ -34,7 +34,7 @@ Visit http://localhost:8080 to view the site.
 ```yaml
 services:
   docs:
-    image: ghcr.io/xitee1/xitee1.github.io:latest
+    image: ghcr.io/xitee1/xitee-docs:latest
     ports:
       - "8080:80"
     restart: unless-stopped
