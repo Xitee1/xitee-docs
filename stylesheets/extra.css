@@ -436,6 +436,10 @@
   gap: 0.25rem;
 }
 
+.repo-card__meta > span[hidden] {
+  display: none;
+}
+
 .repo-card__meta svg {
   width: 0.7rem;
   height: 0.7rem;
