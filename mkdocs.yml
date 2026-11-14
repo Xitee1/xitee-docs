@@ -29,6 +29,24 @@ theme:
 extra_css:
   - stylesheets/extra.css
 
+hooks:
+  - hooks/home.py
+
+extra:
+  # GitHub repositories shown on the home page, in this order
+  projects:
+    - Xitee1/ia-gui
+    - Xitee1/bd-archiver
+    - Xitee1/vhs-tool
+    - Xitee1/opening-ending-extractor
+    - Xitee1/sleep-timer
+    - Xitee1/ha-thermostat-valve-controller
+    - Xitee1/ha-amoled-theme
+    - Xitee1/AD-RoombaMap
+    - luckkyboy/multimedia-knob
+    - Xitee1/PowerBoard
+    - Xitee1/DeathLocation
+
 repo_url: https://github.com/Xitee1/xitee1.github.io
 repo_name: Xitee1/xitee1.github.io
 

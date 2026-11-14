@@ -1,13 +1,16 @@
 ---
+title: Welcome!
 description: Personal documentation site with tutorials and guides about Linux, networking, hardware, Android, media encoding, and more.
+template: home.html
+hide:
+  - navigation
+  - toc
 ---
 
-# Welcome!
-Welcome to my new documentation page!
+# Xitee's Docs
 
-This is my new home page where I will publish all my documentations that I've written while trying out some things.
-Expect many articles about everything computer related soon!
+Notes, guides and project write-ups about Linux, home automation, retro hardware and media archiving.
 
-Please note that english is not my primary language, so expect some grammar issues here and there.
-You are welcome to open an issue in the repo about no matter how small mistake you encounter, or even better, open a pull request.
-This will also help me to improve my english skills :smile:
+I mostly do these projects for myself, but I'm happy to share what I've learned along the way.
+
+:fontawesome-brands-github: [GitHub](https://github.com/Xitee1) · :fontawesome-brands-youtube: [YouTube](https://www.youtube.com/@Xitee88)

@@ -1,0 +1,89 @@
+{#- Home page: intro, latest posts, docs categories, GitHub projects.
+    Data comes from hooks/home.py -#}
+{% extends "main.html" %}
+{% block content %}
+  <section class="home-hero">
+    <img class="home-hero__avatar" src="{{ config.theme.logo | url }}" alt="">
+    <div class="home-hero__text">
+      {{ page.content }}
+    </div>
+  </section>
+
+  {% if docs_categories %}
+    <section class="home-section">
+      <div class="home-section__header">
+        <h2>Docs</h2>
+      </div>
+      <div class="home-grid home-grid--tiles">
+        {% for category in docs_categories %}
+          <a href="{{ category.url }}" class="home-tile">
+            <span class="home-tile__icon">{% include ".icons/" ~ category.icon ~ ".svg" %}</span>
+            <span class="home-tile__title">{{ category.title }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% if latest_posts %}
+    <section class="home-section">
+      <div class="home-section__header">
+        <h2>Latest posts</h2>
+        <a href="{{ 'blog/' | url }}">All posts</a>
+      </div>
+      <div class="home-grid home-grid--posts">
+        {% for post in latest_posts %}
+          <article class="post-card">
+            <a href="{{ post.url }}" class="post-card__link">
+              <div class="post-card__image">
+                {% if post.image %}
+                  <img src="{{ post.image }}" alt="" loading="lazy">
+                {% endif %}
+              </div>
+              <div class="post-card__body">
+                <div class="post-card__meta">
+                  <time datetime="{{ post.date }}">{{ post.date | date }}</time>
+                  {% if post.draft %}
+                    <span class="md-draft">{{ lang.t("blog.draft") }}</span>
+                  {% endif %}
+                </div>
+                <h3 class="post-card__title">{{ post.title }}</h3>
+              </div>
+            </a>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% if projects %}
+    <section class="home-section">
+      <div class="home-section__header">
+        <h2>Projects</h2>
+        <a href="https://github.com/Xitee1">GitHub</a>
+      </div>
+      <div class="home-grid home-grid--projects">
+        {% for repo in projects %}
+          <a href="{{ repo.url }}" class="repo-card">
+            <span class="repo-card__name">
+              {% include ".icons/octicons/repo-16.svg" %}
+              <span>{% if repo.owner != "Xitee1" %}<span class="repo-card__owner">{{ repo.owner }}/</span>{% endif %}{{ repo.name }}</span>
+            </span>
+            <span class="repo-card__text">{{ repo.description }}</span>
+            <span class="repo-card__meta">
+              {% if repo.language %}
+                <span><span class="repo-card__dot" style="background-color: {{ repo.language_color }}"></span>{{ repo.language }}</span>
+              {% endif %}
+              {% if repo.stars %}
+                <span>{% include ".icons/octicons/star-16.svg" %}{{ repo.stars }}</span>
+              {% endif %}
+              {% if repo.forks %}
+                <span>{% include ".icons/octicons/repo-forked-16.svg" %}{{ repo.forks }}</span>
+              {% endif %}
+            </span>
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}
