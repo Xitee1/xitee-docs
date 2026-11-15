@@ -1,5 +1,22 @@
 {% extends "base.html" %}
 
+{#- Same as the theme's title, but without the site name suffix when the full title
+    would be longer than 65 characters (Bing flags longer titles as too long) -#}
+{% block htmltitle %}
+  {% set title = "" %}
+  {% if page.meta and page.meta.title %}
+    {% set title = page.meta.title %}
+  {% elif page.title and not page.is_homepage %}
+    {% set title = page.title | striptags %}
+  {% endif %}
+  {% if title %}
+    {% set full_title = title ~ " - " ~ config.site_name %}
+    <title>{{ full_title if full_title | length <= 65 else title }}</title>
+  {% else %}
+    <title>{{ config.site_name }}</title>
+  {% endif %}
+{% endblock %}
+
 {% block extrahead %}
   {{ super() }}
   {% if page %}

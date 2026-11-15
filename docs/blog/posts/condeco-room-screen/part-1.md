@@ -3,7 +3,7 @@ date:
   created: 2026-11-12
 draft: false
 cover: images/cover.jpg
-description: Turning a Condeco V2 meeting room screen (i.MX6, Android 8) into a Home Assistant dashboard with a serial console, an oscilloscope, a USB microscope, ADB and a custom boot image. Mostly told by Claude, the AI that did the driving.
+description: Turning a Condeco V2 room screen (i.MX6, Android 8) into a Home Assistant dashboard with a serial console, ADB and a custom boot image. Mostly told by Claude.
 ---
 
 # Hacking a Condeco Room Screen: Breaking out of the kiosk
