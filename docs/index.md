@@ -13,4 +13,4 @@ Notes, guides and project write-ups about Linux, home automation, retro hardware
 
 I mostly do these projects for myself, but I'm happy to share what I've learned along the way.
 
-:fontawesome-brands-github: [GitHub](https://github.com/Xitee1) · :fontawesome-brands-youtube: [YouTube](https://www.youtube.com/@Xitee88)
+:fontawesome-brands-github: [GitHub](https://github.com/Xitee1) · :fontawesome-brands-youtube: [YouTube](https://www.youtube.com/@Xitee88) · :material-minecraft: [Minecraft](minecraft.md)
