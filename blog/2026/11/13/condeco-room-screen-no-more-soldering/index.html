@@ -1,0 +1,2676 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Setting up more Condeco V2 room screens without soldering, and taking control of the hardware - USB-only access with a patched U-Boot, touch that follows the rotation, navigation buttons, the RGB status LED, the card reader, switching the screen off, a Bluetooth beacon and finally a real fullscreen dashboard.">
+      
+      
+        <meta name="author" content="Xitee">
+      
+      
+        <link rel="canonical" href="https://docs.xitma.de/blog/2026/11/13/condeco-room-screen-no-more-soldering/">
+      
+      
+        <link rel="prev" href="../../12/hacking-a-condeco-room-screen-breaking-out-of-the-kiosk/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+  
+  
+    
+  
+  
+    
+    <title>Condeco Room Screen: No more soldering - Xitee's Docs</title>
+  
+
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../css/timeago.css">
+    
+      <link rel="stylesheet" href="../../../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Condeco Room Screen: No more soldering",
+      "url": "https://docs.xitma.de/blog/2026/11/13/condeco-room-screen-no-more-soldering/",
+      "description": "Setting up more Condeco V2 room screens without soldering, and taking control of the hardware - USB-only access with a patched U-Boot, touch that follows the rotation, navigation buttons, the RGB status LED, the card reader, switching the screen off, a Bluetooth beacon and finally a real fullscreen dashboard.",
+      "image": "https://docs.xitma.de/assets/images/favicon.png",
+      "author": {
+        "@type": "Person",
+        "name": "Xitee",
+        "url": "https://github.com/Xitee1"
+      },
+      "datePublished": "2026-11-13 00:00:00+00:00",
+      "dateModified": "2026-11-13 00:00:00+00:00"
+    }
+    </script>
+    
+  
+
+  <link href="../../../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../../../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#condeco-room-screen-no-more-soldering" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Xitee's Docs" class="md-header__button md-logo" aria-label="Xitee's Docs" data-md-component="logo">
+      
+  <img src="../../../../../assets/images/avatar.jpg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Xitee's Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Condeco Room Screen: No more soldering
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom" aria-label="" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom" aria-label="" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Xitee1/xitee-docs" title="Go to repository" class="md-source" data-md-component="source" target="_blank" rel="noopener">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    Xitee1/xitee-docs
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Welcome!
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../../docs/mkdocs-syntax-examples/" class="md-tabs__link">
+          
+  
+  
+  Docs
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../../" class="md-tabs__link">
+          
+  
+  
+  Blog
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden="">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Xitee's Docs" class="md-nav__button md-logo" aria-label="Xitee's Docs" data-md-component="logo">
+      
+  <img src="../../../../../assets/images/avatar.jpg" alt="logo">
+
+    </a>
+    Xitee's Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Xitee1/xitee-docs" title="Go to repository" class="md-source" data-md-component="source" target="_blank" rel="noopener">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    Xitee1/xitee-docs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Welcome!
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2">
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/mkdocs-syntax-examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MKDocs Syntax Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2">
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Android
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Android
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/android/sideload-an-android-app-and-spoofing-the-installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sideload an Android App and spoofing the installer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hardware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_1">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_1" id="__nav_2_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kiosk
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kiosk
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/hardware/kiosk/raspberry-pi-kiosk-webpage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set up Raspberry Pi as web kiosk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_2">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_2" id="__nav_2_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry pi
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Raspberry pi
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/hardware/raspberry-pi/raspberry-pi-network-boot-iscsi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Raspberry Pi: Network boot with the root filesystem on iSCSI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_3" id="__nav_2_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Storage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3_1">
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_3_1" id="__nav_2_3_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filesystems
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_3_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Filesystems
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/hardware/storage/filesystems/encryption-with-luks-usb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Disk encryption with LUKS and using USB stick to unlock
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4">
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Media
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Media
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_1">
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_1" id="__nav_2_4_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Video encoding
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Video encoding
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/media/video-encoding/benchmark-with-ffmpeg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark with ffmpeg
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5">
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Networking
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Networking
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5_1">
+        
+          
+          <label class="md-nav__link" for="__nav_2_5_1" id="__nav_2_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Opnsense
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Opnsense
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/networking/opnsense/migrate-isc-dhcp-to-dnsmasq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OPNsense: Migrate from ISC DHCP to Dnsmasq
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5_2">
+        
+          
+          <label class="md-nav__link" for="__nav_2_5_2" id="__nav_2_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problems
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Problems
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/networking/problems/issues-with-specific-wifi-network-only-working-few-seconds/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specific (Wi-Fi) Network works for few seconds, breaks, then works again for few seconds
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5_3">
+        
+          
+          <label class="md-nav__link" for="__nav_2_5_3" id="__nav_2_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/networking/tools/iperf3-network-speed-tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    iperf3: Network speed tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6">
+        
+          
+          <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools and scripts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tools and scripts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6_1">
+        
+          
+          <label class="md-nav__link" for="__nav_2_6_1" id="__nav_2_6_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Windows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_6_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Windows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../docs/Tools%20and%20scripts/Windows/extract-archives-withing-subfolders/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extract archives within subfolders (WinRAR)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked="">
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Blog
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+    
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href="../../../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2">
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Archive
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Archive
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2025
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#the-plan-no-serial-just-usb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The plan: no serial, just USB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trap-1-u-boot-thinks-it-booted-from-an-sd-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trap 1: U-Boot thinks it booted from an SD card
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backups-without-a-serial-console" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backups without a serial console
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#one-boot-image-per-tablet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One boot image per tablet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-there-a-way-in-without-opening-the-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Is there a way in without opening the case?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-touchscreen-doesnt-rotate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The touchscreen doesn't rotate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#navigation-buttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Navigation buttons
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-status-led" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The status LED
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-card-reader" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The card reader
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The card reader">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-in-there" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's in there
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#talking-to-the-reader" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Talking to the reader
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-didnt-help" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What didn't help
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-fix-that-was-in-the-docs-all-along" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The fix that was in the docs all along
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cards-in-home-assistant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cards in Home Assistant
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-display" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The display
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The display">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on-and-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On and off
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#brightness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Brightness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wallpaper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wallpaper
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bluetooth-beacon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bluetooth beacon
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#everything-in-home-assistant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Everything in Home Assistant
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-the-network-is-the-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When the network is the problem
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-real-fullscreen-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A real fullscreen dashboard
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="A real fullscreen dashboard">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-didnt-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What didn't work
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-webview-is-signed-with-a-public-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The WebView is signed with a public key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fully-kiosk-now-with-a-current-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fully Kiosk, now with a current engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"></path></svg>
+                        <time datetime="2026-11-13 00:00:00+00:00" class="md-ellipsis">November 13, 2026</time>
+                      </div>
+                    </li>
+                    
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"></path></svg>
+                          <span class="md-ellipsis">
+                            
+                              22 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+
+  
+  
+
+
+<h1 id="condeco-room-screen-no-more-soldering">Condeco Room Screen: No more soldering<a class="headerlink" href="#condeco-room-screen-no-more-soldering" title="Permanent link">¶</a></h1>
+<div class="admonition info">
+<p class="admonition-title">AI-generated post</p>
+<p>This post was written by an AI. I did not write most of the text myself. I did, however, carry out everything described here together with Claude on my own room screens. I also reviewed the whole text and made some changes.</p>
+</div>
+<p>At the end of <a href="../../12/hacking-a-condeco-room-screen-breaking-out-of-the-kiosk/">Part 1</a> one room screen was running my Home Assistant dashboard. To get there, I had soldered wires onto the debug UART to talk to U-Boot over the serial console. That's fine for one device, but I've got more of them, and I don't want to solder on every single one.</p>
+<p>So the goals for day two were:</p>
+<ul>
+<li>set up more screens <strong>without soldering</strong>, just USB</li>
+<li>get the remaining hardware under control: the touchscreen in portrait mode, navigation buttons, the RGB status LED below the screen, the card reader, and a screen that can actually be switched off</li>
+</ul>
+<p>Same setup as before: Claude did the digging through ADB, fastboot and USB, I flipped switches and plugged cables. A small toolbox script and an app came out of all this as well, but this post is about how the hardware works and how it's controlled, not about the tools.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The status LED bar, now under my control" src="../../../../condeco-room-screen/images/led-bar-yellow.jpg"></a></p>
+<h2 id="the-plan-no-serial-just-usb">The plan: no serial, just USB<a class="headerlink" href="#the-plan-no-serial-just-usb" title="Permanent link">¶</a></h2>
+<p>The DIP switch behind the cover is the key. In the position the Eptura flash docs describe, the i.MX6 boot ROM doesn't look at the eMMC at all. It waits for a program over USB and shows up on the PC as:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1">15a2:0061 Freescale Semiconductor, Inc. i.MX 6Solo/6DualLite SystemOnChip in RecoveryMode
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>DIP switch</th>
+<th>Position (ON = to the right)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Normal boot</td>
+<td>On, Off, On, Off</td>
+</tr>
+<tr>
+<td>USB download mode</td>
+<td>Off, On, Off, Off</td>
+</tr>
+</tbody>
+</table>
+<p>With <code>imx_usb</code> you can send a bootloader into RAM. We already had the board's own U-Boot from the backup in Part 1 (it lives in the eMMC's <code>boot0</code> area). The problem from the end of Part 1: loaded over USB, the stock U-Boot just boots Android, and on a fresh device that's Condeco again.</p>
+<p>U-Boot builds its boot command at runtime from the string <code>boota mmc%d</code>. That string is exactly 12 bytes long, including the terminating zero. So those 12 bytes had to be patched in a copy of the file, in two variants:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Boot command</th>
+<th>What you get</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>uboot-fastboot.imx</code></td>
+<td><code>fastboot 0</code></td>
+<td>fastboot over USB, for booting an image from RAM</td>
+</tr>
+<tr>
+<td><code>uboot-ums.imx</code></td>
+<td><code>ums 0 mmc 2</code></td>
+<td>the whole eMMC as a USB drive on the PC</td>
+</tr>
+</tbody>
+</table>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><span class="n">b</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">"uboot.imx"</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</span><span id="__span-1-2"><span class="k">assert</span> <span class="n">b</span><span class="p">[</span><span class="mh">0x6bbd1</span><span class="p">:</span><span class="mh">0x6bbd1</span> <span class="o">+</span> <span class="mi">12</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">"boota mmc</span><span class="si">%d</span><span class="se">\0</span><span class="s2">"</span>
+</span><span id="__span-1-3"><span class="n">b</span><span class="p">[</span><span class="mh">0x6bbd1</span><span class="p">:</span><span class="mh">0x6bbd1</span> <span class="o">+</span> <span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">"fastboot 0</span><span class="se">\0\0</span><span class="s2">"</span>     <span class="c1"># or b"ums 0 mmc 2\0"</span>
+</span><span id="__span-1-4"><span class="nb">open</span><span class="p">(</span><span class="s2">"uboot-fastboot.imx"</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</span></code></pre></div>
+<p>These files are only ever loaded into RAM, never written to the device. That's also why this shouldn't brick anything: the download mode lives in the SoC's ROM, and as long as nobody touches <code>boot0</code>, a power cycle always brings back the original state.</p>
+<p>The first test went well: <code>imx_usb uboot-fastboot.imx</code>, five seconds of countdown, and fastboot showed up. No key press, no serial console.</p>
+<h2 id="trap-1-u-boot-thinks-it-booted-from-an-sd-card">Trap 1: U-Boot thinks it booted from an SD card<a class="headerlink" href="#trap-1-u-boot-thinks-it-booted-from-an-sd-card" title="Permanent link">¶</a></h2>
+<p><code>fastboot boot</code> with the ADB boot image from Part 1 started the kernel, and ADB even came up. But <code>adb shell</code> failed with <code>exec '/system/bin/sh' failed</code>. Nothing was mounted.</p>
+<p>The reason: loaded over USB, U-Boot doesn't know that the eMMC is the boot device and tells Android <code>androidboot.storage_type=sd</code>. Android's init then imports <code>init.freescale.sd.rc</code> instead of <code>init.freescale.emmc.rc</code>. Those two files differ in a single line:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"># init.freescale.emmc.rc
+</span><span id="__span-2-2">symlink /dev/block/platform/soc0/soc/2100000.aips-bus/219c000.usdhc/by-name /dev/block/by-name
+</span><span id="__span-2-3"># init.freescale.sd.rc
+</span><span id="__span-2-4">symlink /dev/block/platform/soc0/soc/2100000.aips-bus/2198000.usdhc/by-name /dev/block/by-name
+</span></code></pre></div>
+<p>So <code>/dev/block/by-name</code> pointed at the empty SD card controller, and <code>/system</code> couldn't be found. The fix is simple: in every boot image we build, <code>init.freescale.sd.rc</code> gets the content of <code>init.freescale.emmc.rc</code>. These tablets never boot from SD anyway, so this changes nothing for a normal boot. After that, Android came up completely from RAM.</p>
+<h2 id="backups-without-a-serial-console">Backups without a serial console<a class="headerlink" href="#backups-without-a-serial-console" title="Permanent link">¶</a></h2>
+<p>Before writing anything to a new tablet, I want a full backup. Directly over <code>adb root</code> did not work, it prints "restarting adbd as root", but the shell is still the <code>shell</code> user. The adbd on this <code>user</code> build always drops its privileges, no matter what <code>ro.secure</code> or <code>ro.debuggable</code> say. And the eMMC block devices are root-only.</p>
+<p>That's what the second U-Boot variant is for. Loaded via <code>imx_usb</code>, <code>uboot-ums.imx</code> turns the eMMC into a USB drive called "UMS disk 0". Handy detail: its USB serial number is the device's serial number, so you can't mix up tablets. Then it's just:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1">sudo<span class="w"> </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/sdX<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>4M<span class="w"> </span><span class="nv">status</span><span class="o">=</span>progress<span class="w"> </span>&gt;<span class="w"> </span>emmc-backup.img
+</span></code></pre></div>
+<p>At about 3.8 MB/s the 7.3 GiB took around 35 minutes. The first partitions were byte-identical to the backup from Part 1 (made via serial). The only thing you can't reach this way is <code>boot0</code> with U-Boot itself (<code>ums 0 mmc 2.1</code> would be one byte too long).</p>
+<p>To leave the USB drive mode, you have to cut the power. U-Boot only leaves <code>ums</code> with Ctrl+C on the serial console or when the power goes.</p>
+<h2 id="one-boot-image-per-tablet">One boot image per tablet<a class="headerlink" href="#one-boot-image-per-tablet" title="Permanent link">¶</a></h2>
+<p>On the first tablet, U-Boot was from 2021, but the kernel was from July 2025. Condeco's updates replace the boot image and the system, so a tablet that has been lying in a drawer may run older firmware. A boot image from another tablet might then not match its system.</p>
+<p>So to be safe, we build the boot images from the tablet's <strong>own</strong> boot partition, which is read via <code>ums</code> in the first step. The firmware version can be read from the system partition without even mounting it:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1">sudo<span class="w"> </span>debugfs<span class="w"> </span>-R<span class="w"> </span><span class="s2">"cat /build.prop"</span><span class="w"> </span>/dev/sdX3<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>ro.build.display.id
+</span><span id="__span-4-2"><span class="c1"># ro.build.display.id=8.4.6 dev-keys</span>
+</span></code></pre></div>
+<h2 id="is-there-a-way-in-without-opening-the-case">Is there a way in without opening the case?<a class="headerlink" href="#is-there-a-way-in-without-opening-the-case" title="Permanent link">¶</a></h2>
+<p>The DIP switch is behind the back cover, so for the first access the case has to come off. I noticed that holding the power button while plugging in power does something odd: the tablet turns on briefly and then off again. Maybe a hidden mode?</p>
+<p>While I tried it, the serial console and all USB events were logged:</p>
+<ul>
+<li><strong>Holding the button for about 5 seconds:</strong> U-Boot starts completely normally and the tablet switches off during the countdown. That's the hardware shutdown of the i.MX6's power controller (SNVS) after a long press, not a special mode. Nothing appeared on USB.</li>
+<li><strong>Short press:</strong> normal boot.</li>
+</ul>
+<p>There's nothing else to try either. The power key is the only button on the board (confirmed by checking the device tree). U-Boot has a "recovery key" built in, but on NXP's reference board that's a volume key, which this board doesn't have. And the kernel has no reboot mode for the download mode.</p>
+<p>So for a brand-new tablet: open the case once and flip the DIP switch. After that initial time, it's not needed anymore. With a boot image that has ADB, <code>adb reboot bootloader</code> lands in the tablet's own U-Boot in fastboot mode, and that one knows the eMMC partitions:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1">adb<span class="w"> </span>reboot<span class="w"> </span>bootloader
+</span><span id="__span-5-2">fastboot<span class="w"> </span>getvar<span class="w"> </span>partition-size:boot<span class="w">    </span><span class="c1"># partition-size:boot: 0x2000000</span>
+</span><span id="__span-5-3">fastboot<span class="w"> </span>flash<span class="w"> </span>boot<span class="w"> </span>boot-new.img
+</span><span id="__span-5-4">fastboot<span class="w"> </span>reboot
+</span></code></pre></div>
+<p>The patched U-Boot loaded over USB doesn't list any partitions, which is a nice way to tell the two apart. So later changes, like a different dashboard URL, work with the case closed. Only a full backup needs the download mode.</p>
+<h2 id="the-touchscreen-doesnt-rotate">The touchscreen doesn't rotate<a class="headerlink" href="#the-touchscreen-doesnt-rotate" title="Permanent link">¶</a></h2>
+<p>I noticed that Lawnchair started in portrait mode, and the touch was completely off. I tapped one thing and hit something else, so I couldn't even reach the settings.</p>
+<p>The input configuration in <code>/system/usr/idc/fts_ts.idc</code> has this:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1">touch.deviceType = touchScreen
+</span><span id="__span-6-2">touch.orientationAware = 0
+</span></code></pre></div>
+<p><code>orientationAware = 0</code> means Android never rotates the touch coordinates. They only match in the panel's base orientation (landscape, 1280×800). As soon as any app forces portrait, the picture rotates and the touch doesn't.</p>
+<p><code>/system</code> is read-only, so the file can't just be edited. What was tried:</p>
+<ol>
+<li><strong>Bind-mount a patched file over it</strong> from the boot image's init script. SELinux blocked it: <code>avc: denied { mounton } … tcontext=u:object_r:system_file:s0 tclass=file</code>.</li>
+<li><strong>A config in <code>/data/system/devices/idc/</code></strong>, which Android also searches. But there, files are looked up by vendor and product ID first, and this touch controller reports <code>0000/0000</code>. So Android only looks it up by name, and then the <code>/system</code> file wins.</li>
+<li><strong>Bind-mount a whole folder instead of a single file.</strong> That one works. SELinux allows it for directories.</li>
+</ol>
+<p>The boot image now does this early during boot, before the input system starts:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1">on post-fs-data
+</span><span id="__span-7-2">    mkdir /data/system/toolbox 0755 system system
+</span><span id="__span-7-3">    mkdir /data/system/toolbox/idc 0755 system system
+</span><span id="__span-7-4">    copy /system/usr/idc/&lt;every other file&gt; /data/system/toolbox/idc/&lt;same name&gt;
+</span><span id="__span-7-5">    copy /toolbox_idc_fts_ts.idc /data/system/toolbox/idc/fts_ts.idc
+</span><span id="__span-7-6">    mount none /data/system/toolbox/idc /system/usr/idc bind
+</span></code></pre></div>
+<p>The patched <code>fts_ts.idc</code> with <code>orientationAware = 1</code> sits in the ramdisk. After a reboot <code>dumpsys input</code> reports <code>OrientationAware: true</code>, and touch works in portrait mode too.</p>
+<h2 id="navigation-buttons">Navigation buttons<a class="headerlink" href="#navigation-buttons" title="Permanent link">¶</a></h2>
+<p>The Condeco build has no navigation bar at all. Not hidden, there's no navigation bar window in the system. In Part 1, <code>qemu.hw.mainkeys=0</code> didn't help either.</p>
+<p>The quick rescue when you're stuck somewhere is ADB:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1">adb<span class="w"> </span>shell<span class="w"> </span>input<span class="w"> </span>keyevent<span class="w"> </span>KEYCODE_BACK
+</span><span id="__span-8-2">adb<span class="w"> </span>shell<span class="w"> </span>input<span class="w"> </span>keyevent<span class="w"> </span>KEYCODE_HOME
+</span><span id="__span-8-3">adb<span class="w"> </span>shell<span class="w"> </span>input<span class="w"> </span>keyevent<span class="w"> </span>KEYCODE_APP_SWITCH
+</span><span id="__span-8-4"><span class="c1"># and to get into Lawnchair's settings directly:</span>
+</span><span id="__span-8-5">adb<span class="w"> </span>shell<span class="w"> </span>am<span class="w"> </span>start<span class="w"> </span>-n<span class="w"> </span>ch.deletescape.lawnchair/.settings.ui.SettingsActivity
+</span></code></pre></div>
+<p>The real solution is an app that draws its own buttons and triggers them through Android's accessibility service. I use <a href="https://f-droid.org/packages/tw.com.daxia.virtualsoftkeys/" target="_blank" rel="noopener">VirtualSoftKeys</a>: a swipe up from the bottom edge brings up back, home and recents.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="VirtualSoftKeys settings: size and position of the touch area" src="../../../../condeco-room-screen/images/claude-virtualsoftkeys.png"></a></p>
+<p>Enabling it normally requires going through two permission screens. That's hard without navigation buttons, so it's done over ADB:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1">adb<span class="w"> </span>shell<span class="w"> </span>appops<span class="w"> </span><span class="nb">set</span><span class="w"> </span>tw.com.daxia.virtualsoftkeys<span class="w"> </span>SYSTEM_ALERT_WINDOW<span class="w"> </span>allow
+</span><span id="__span-9-2">adb<span class="w"> </span>shell<span class="w"> </span>settings<span class="w"> </span>put<span class="w"> </span>secure<span class="w"> </span>enabled_accessibility_services<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-3"><span class="w">    </span>tw.com.daxia.virtualsoftkeys/tw.com.daxia.virtualsoftkeys.service.ServiceFloating
+</span><span id="__span-9-4">adb<span class="w"> </span>shell<span class="w"> </span>settings<span class="w"> </span>put<span class="w"> </span>secure<span class="w"> </span>accessibility_enabled<span class="w"> </span><span class="m">1</span>
+</span></code></pre></div>
+<p>The order matters. The first time it was the other way round, and the bar didn't appear. The service creates its touch area once, when it starts, and at that point it didn't have the permission to draw over other apps yet. Switching the service off and on again fixed it.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Lawnchair settings, finally with navigation buttons at the bottom" src="../../../../condeco-room-screen/images/claude-lawnchair-settings-navbar.png"></a></p>
+<h2 id="the-status-led">The status LED<a class="headerlink" href="#the-status-led" title="Permanent link">¶</a></h2>
+<p>The light bar below the screen is what showed whether a room is free. It's an RGB LED on three PWM channels, <code>pwm-red-light</code>, <code>pwm-green-light</code> and <code>pwm-blue-light</code>, each 0 to 255.</p>
+<p>The obvious way would be the LED files in <code>/sys/class/leds/</code>. Condeco's init script even makes them writable for everyone (<code>chmod 0666</code>), but SELinux doesn't let the shell anywhere near them:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1">avc: denied { search } for name="leds" ... scontext=u:r:shell:s0 tcontext=u:object_r:sysfs_leds:s0
+</span></code></pre></div>
+<p>So how does Condeco do it? The Condeco app is in the system partition of my backup. It's a Xamarin (.NET) app, and its assemblies are LZ4-compressed, so they had to be unpacked first. Inside there's a JavaScript interface for the app's web UI (<code>SetLightbarRGBColourAsync</code>), which ends up in a call <code>CondecoLightBar.SetLightBar(r, g, b)</code>. That class comes from a Condeco library in the system, which in turn calls a <strong>system service</strong> that Condeco built into Android: <code>conrgbledsys</code>, with a single method <code>setrgb</code>.</p>
+<p>And that service can be called from the shell:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1">adb<span class="w"> </span>shell<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>conrgbledsys<span class="w"> </span><span class="m">1</span><span class="w"> </span>i32<span class="w"> </span><span class="m">16711680</span><span class="w">   </span><span class="c1"># 0xFF0000, red</span>
+</span><span id="__span-11-2">adb<span class="w"> </span>shell<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>conrgbledsys<span class="w"> </span><span class="m">1</span><span class="w"> </span>i32<span class="w"> </span><span class="m">65280</span><span class="w">      </span><span class="c1"># 0x00FF00, green</span>
+</span><span id="__span-11-3">adb<span class="w"> </span>shell<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>conrgbledsys<span class="w"> </span><span class="m">1</span><span class="w"> </span>i32<span class="w"> </span><span class="m">255</span><span class="w">        </span><span class="c1"># 0x0000FF, blue</span>
+</span><span id="__span-11-4">adb<span class="w"> </span>shell<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>conrgbledsys<span class="w"> </span><span class="m">1</span><span class="w"> </span>i32<span class="w"> </span><span class="m">0</span><span class="w">          </span><span class="c1"># off</span>
+</span></code></pre></div>
+<p>It takes one number, <code>0xRRGGBB</code> in decimal. The first attempt with three separate values only switched it off, because the service only read the first one. Any colour in between works too, the yellow in the photo at the top is <code>0xFFD400</code>.</p>
+<p>There's one catch: a normal app isn't allowed to do this. SELinux denies apps even finding the service (<code>avc: denied { find } for service=conrgbledsys … scontext=u:r:untrusted_app</code>). Condeco's app could do it because it runs with the system's user ID and signature, which nobody else can get.</p>
+<p>The way around it: the part that talks to the LED runs as the shell user, the same way <code>service call</code> does. Android's <code>app_process</code> can start Java code from an APK as a normal process, and an init service in the boot image starts it at boot as shell. The app itself only provides the buttons and talks to that background process. The result:</p>
+<ul>
+<li><strong>On the tablet:</strong> sliders for red, green, blue and brightness, plus quick colours</li>
+<li><strong>HTTP API</strong> on the network with a token, e.g. <code>POST /api/led {"rgb":"FF0000","brightness":128}</code></li>
+<li><strong>MQTT</strong> with Home Assistant discovery: the LED shows up as a normal light entity with colour and brightness</li>
+</ul>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The local LED control on the tablet" src="../../../../condeco-room-screen/images/claude-led-app.png"></a></p>
+<p>Later, the same background process also took over the card reader and the screen, more on that below.</p>
+<h2 id="the-card-reader">The card reader<a class="headerlink" href="#the-card-reader" title="Permanent link">¶</a></h2>
+<p>Below the screen there's a small window with a blue LED. When I held my phone near it, the LED lit up bright blue. Condeco sells these screens for checking in with your badge, so that had to be a card reader. I tried a Mifare chip, an NFC card and an NFC sticker. Nothing. The phone worked from about <strong>10 cm</strong> away, every card stayed dark even when it was lying right on the device.</p>
+<h3 id="whats-in-there">What's in there<a class="headerlink" href="#whats-in-there" title="Permanent link">¶</a></h3>
+<p>The reader isn't a USB device and doesn't show up as an input device in Android. The pieces are in the system instead:</p>
+<ul>
+<li>a native daemon <code>rfidmanagerd</code> that talks to a microcontroller over a serial port (<code>/dev/ttymxc1</code>)</li>
+<li>its config file <code>/system/etc/rfid/rfidmanagerd.conf</code> with the card formats HID Prox, iClass, ISO 14443A (Mifare) and ISO 15693, all enabled, plus "beep on read" and "flash LED on read"</li>
+<li>another Condeco system service, <code>conrfidsys</code>, with <code>read</code>, <code>read_timed</code>, <code>write</code>, <code>enablerfid</code> and <code>disablerfid</code></li>
+</ul>
+<p>The daemon writes every card it reads as <code>$[ID]</code> into a queue and also logs it:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1">rfidmanagerd: Write to RFID Queue /data/misc/rfid/rfidq : $[08C66A6E]
+</span></code></pre></div>
+<p>Every time I held my phone near it, there was a new ID starting with <code>08</code>. That's the random ID phones send when they pretend to be a card. A real card always sends the same ID.</p>
+<p>Here's an image of the card reader part of the board:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The reader part of the board: TI TRF7970A, NXP LPC1752 and the Bluetooth chip" src="../../../../condeco-room-screen/images/reader-board.jpg"></a></p>
+<ul>
+<li><strong>TI TRF7970A</strong>, the actual reader chip for 13.56 MHz: ISO 14443A/B (Mifare, DESFire, NTAG), ISO 15693 and FeliCa</li>
+<li><strong>NXP LPC1752</strong>, a small Cortex-M3 that runs the reader firmware (<code>/etc/rfid/rfid.bin</code>)</li>
+<li>a <strong>74HC4060</strong> counter with a crystal, the classic way to make the 125 kHz carrier for HID Prox</li>
+<li>next to it a <strong>CSR1010</strong> with its own antenna: Bluetooth LE for an iBeacon, nothing to do with cards</li>
+</ul>
+<p>So the hardware is built for all of my cards.</p>
+<h3 id="talking-to-the-reader">Talking to the reader<a class="headerlink" href="#talking-to-the-reader" title="Permanent link">¶</a></h3>
+<p>A preinstalled "RoomScreen Test App" has a "Test RFID" page that shows the reader's firmware version, its settings and the last card. The code behind it shows the protocol: short text commands go through <code>conrfidsys</code> to the microcontroller, and the answers come back through the same queue as the cards.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$V</code></td>
+<td>firmware version (here <code>V2,10</code>)</td>
+</tr>
+<tr>
+<td><code>$M</code></td>
+<td>card types: <code>01</code> HID Prox, <code>02</code> iClass, <code>04</code> ISO 14443A, <code>08</code> ISO 15693</td>
+</tr>
+<tr>
+<td><code>$H</code></td>
+<td>flash LED / beep on read</td>
+</tr>
+<tr>
+<td><code>$F</code></td>
+<td>customer flags</td>
+</tr>
+<tr>
+<td><code>$P</code></td>
+<td>output power (0 = full, 1 = half)</td>
+</tr>
+<tr>
+<td><code>$T</code></td>
+<td>test mode</td>
+</tr>
+</tbody>
+</table>
+<p>Without a value a command only reads, with a hex value it sets and stores the value in the reader's flash. From the shell (the <code>\r\n</code> matters):</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1">adb<span class="w"> </span>shell
+</span><span id="__span-13-2">service<span class="w"> </span>call<span class="w"> </span>conrfidsys<span class="w"> </span><span class="m">3</span><span class="w"> </span>s16<span class="w"> </span><span class="s1">$'$M\r\n'</span><span class="w">     </span><span class="c1"># ask for the card types</span>
+</span><span id="__span-13-3">service<span class="w"> </span>call<span class="w"> </span>conrfidsys<span class="w"> </span><span class="m">2</span><span class="w"> </span>i32<span class="w"> </span><span class="m">256</span><span class="w"> </span>i32<span class="w"> </span><span class="m">1000</span><span class="w">  </span><span class="c1"># read the queue: "$Mf", "$[...]", ...</span>
+</span></code></pre></div>
+<p>Everything was on factory settings: all four card types on (<code>$Mf</code>), LED and beep on, full power. The beep never made a sound, so I think there's no buzzer fitted.</p>
+<h3 id="what-didnt-help">What didn't help<a class="headerlink" href="#what-didnt-help" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>Card ID length:</strong> phones send 4-byte IDs, my Mifare chip and the sticker 7 bytes. But my Mifare Classic card with a 4-byte ID didn't work either.</li>
+<li><strong>The reader firmware:</strong> the disassembly shows that it polls for Mifare correctly and waits 6 ms after switching the field on, ISO 14443 asks for at least 5 ms.</li>
+<li><strong>Another tablet:</strong> a third, never modified one behaved exactly the same.</li>
+<li><strong>Test mode</strong> (<code>$T1</code>): the field stays on and the firmware only looks for Mifare. Still nothing.</li>
+</ul>
+<p>The difference between a phone and a card is power: the phone answers with its own battery, the card has to live off the reader's field. So I measured the field with a loop of wire between the tip and the ground clip of a scope probe, with the scope set up and read out over the network.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Holding the scope loop over the screen, with the test app open" src="../../../../condeco-room-screen/images/scope-loop-on-screen.jpg"></a></p>
+<p>On the LED bar, where I had held my cards all the time, the loop picked up only 30 to 130 mV. On the <strong>screen just above the blue LED</strong> it was about 530 mV, and still about 255 mV at 5 cm. The antenna sits behind the lower edge of the display, not behind the LED. With my card lying on that spot in test mode, the queue finally showed its ID.</p>
+<h3 id="the-fix-that-was-in-the-docs-all-along">The fix that was in the docs all along<a class="headerlink" href="#the-fix-that-was-in-the-docs-all-along" title="Permanent link">¶</a></h3>
+<p>In normal mode my cards still didn't work, even on the right spot. Only then did I do what I should have done first: look at Condeco's documentation. Eptura's knowledge base has an article <a href="https://knowledge.eptura.com/Engage/08-Condeco_screens_and_devices/Eptura_Device_Hub/Need_help%3F/RFID_card_not_recognized" target="_blank" rel="noopener">"RFID card not recognized"</a>, and the advice is to <strong>enable only the card type you actually use</strong>.</p>
+<p>All my cards are ISO 14443A, so:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1">service<span class="w"> </span>call<span class="w"> </span>conrfidsys<span class="w"> </span><span class="m">3</span><span class="w"> </span>s16<span class="w"> </span><span class="s1">$'$M04\r\n'</span><span class="w">   </span><span class="c1"># answer: $M4</span>
+</span></code></pre></div>
+<p>Now my Mifare Classic card, the NTAG215 sticker and my Mifare chip are all read in normal mode, and the LED flashes every time. My guess is that with all four types on, the reader keeps switching between the methods and a card never gets enough power in one go. Phones don't care because of their battery. The docs also say to hold the card "near the LED panel at the bottom of the device", so even that was written down.</p>
+<p>The weird thing:
+A day and lots of experimenting later, I tried the card reader again. Nothing worked at all, not even the phone was detected, and the reader didn't answer any command. Its microcontroller has two control lines, reset and boot loader (GPIO 203 and 204), and both were at 0, so it was stuck in reset. A possible cause is a race at boot: Condeco's init script sets up these lines after <code>rfidmanagerd</code> has already started, which puts them back to 0. Setting both lines to 1 brought the reader back (that needs root, see <a href="part-3.md">Part 3</a>), and after the next reboot it worked normally again.
+Then, out of curiosity I've tried having all four types enabled at once, and to my surprise, now my cards were read there too. I can't say what changed in between. So if your cards aren't detected, enable only the types you use, and if in doubt, check with a phone first whether the reader works at all.</p>
+<h3 id="cards-in-home-assistant">Cards in Home Assistant<a class="headerlink" href="#cards-in-home-assistant" title="Permanent link">¶</a></h3>
+<p>The background process from the LED section now also reads the queue. It reports a card once per tap (the reader repeats a card every 0.5 to 2 seconds while it's lying there) and keeps the last one. One surprise: the card type setting didn't survive a reboot, even though the reader stores it in its flash. Probably <code>rfidmanagerd</code> loads the reader firmware again at every boot. So the background process remembers the card types and sends them to the reader again when it starts. Only one process should read the queue, by the way: whatever is read is gone from it. So while the test app or the Condeco app is running, it can catch a card first, and that card never reaches Home Assistant.</p>
+<h2 id="the-display">The display<a class="headerlink" href="#the-display" title="Permanent link">¶</a></h2>
+<p>The display had two problems: it never goes off, and its brightness doesn't adapt to the room.</p>
+<h3 id="on-and-off">On and off<a class="headerlink" href="#on-and-off" title="Permanent link">¶</a></h3>
+<p>The screen never goes off. Not with the power button, not with <code>input keyevent KEYCODE_SLEEP</code>, and not with a short screen timeout either. Android logs that it's calling <code>goToSleep</code> and then just stays awake. The backlight in <code>/sys/class/backlight/pwm-backlight</code> is closed to the shell, by SELinux like the LED files, and the file also belongs to the <code>system</code> user.</p>
+<p>This time the code was checked first. Other parts of Android put the device to sleep by calling <code>goToSleep</code> on the power manager. In this firmware Condeco <strong>emptied that method</strong>: it only checks the time stamp and returns. So the power button, <code>KEYCODE_SLEEP</code> and every app end up there, and nothing happens. That's obviously on purpose for a meeting room screen, but not what I want on a wall at home.</p>
+<p>The screen timeout runs inside the power manager and doesn't go through that method. My first test with a short timeout didn't sleep, probably because something else kept the tablet awake. A later test on the other tablet went to sleep after 15 seconds and woke up again with <code>input keyevent KEYCODE_WAKEUP</code> (more on that in <a href="part-3.md">Part 3</a>). By then the way below was already built.</p>
+<p>The way around it is one level lower. When Android goes to sleep normally, the power manager asks the graphics service SurfaceFlinger to switch the display off. And the shell is allowed to talk to SurfaceFlinger directly (it holds <code>ACCESS_SURFACE_FLINGER</code>). So the background process makes the same call, from Java started with <code>app_process</code>:</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__span-15-1"><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">sc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Class</span><span class="p">.</span><span class="na">forName</span><span class="p">(</span><span class="s">"android.view.SurfaceControl"</span><span class="p">);</span>
+</span><span id="__span-15-2"><span class="n">Object</span><span class="w"> </span><span class="n">display</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="na">getMethod</span><span class="p">(</span><span class="s">"getBuiltInDisplay"</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">.</span><span class="na">class</span><span class="p">).</span><span class="na">invoke</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-15-3"><span class="n">sc</span><span class="p">.</span><span class="na">getMethod</span><span class="p">(</span><span class="s">"setDisplayPowerMode"</span><span class="p">,</span><span class="w"> </span><span class="n">IBinder</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+</span><span id="__span-15-4"><span class="w">        </span><span class="p">.</span><span class="na">invoke</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="n">display</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">   </span><span class="c1">// 0 = off, 2 = on</span>
+</span></code></pre></div>
+<p>The screen really goes dark. But the power manager doesn't know about it, so nothing switches the display back on, and a touch on the dark screen would land in the dashboard behind it. So before switching off, the process opens a black, full-screen page of the app. A touch on the dark screen lands on that page, which asks for the display to be switched on again and closes. With "Wake screen on touch" off, only Home Assistant or the HTTP API can switch it back on.</p>
+<h3 id="brightness">Brightness<a class="headerlink" href="#brightness" title="Permanent link">¶</a></h3>
+<p>Automatic brightness does nothing. Android lists an ISL29023 light sensor, which is from NXP's reference board and isn't on this one. The sensor in the device tree, an APDS9300, doesn't answer, so it's probably not fitted. The backlight file is closed, as above, but Android's own brightness setting works from the shell:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1">adb<span class="w"> </span>shell<span class="w"> </span>settings<span class="w"> </span>put<span class="w"> </span>system<span class="w"> </span>screen_brightness_mode<span class="w"> </span><span class="m">0</span><span class="w">   </span><span class="c1"># manual</span>
+</span><span id="__span-16-2">adb<span class="w"> </span>shell<span class="w"> </span>settings<span class="w"> </span>put<span class="w"> </span>system<span class="w"> </span>screen_brightness<span class="w"> </span><span class="m">128</span><span class="w">      </span><span class="c1"># 10 to 255</span>
+</span></code></pre></div>
+<p>Below 10 nothing changes anymore. The background process uses the same setting, shows it as 1 to 100 % and checks every 10 seconds whether it was changed on the tablet. So brightness is now a slider in Home Assistant, and an automation can dim the screen in the evening.</p>
+<h3 id="wallpaper">Wallpaper<a class="headerlink" href="#wallpaper" title="Permanent link">¶</a></h3>
+<p>Lawnchair shows the wallpaper behind the home screen. The shell isn't allowed to set one (it lacks the <code>SET_WALLPAPER</code> permission), but the app is, so the toolbox sends the image to the app. The first result was heavily zoomed in: Lawnchair asks for a wallpaper of 1920×1280 so it can scroll it, and Android never makes a wallpaper smaller than 1280×1280. Now the app tells Android the size it wants and scales the image itself.</p>
+<h2 id="bluetooth-beacon">Bluetooth beacon<a class="headerlink" href="#bluetooth-beacon" title="Permanent link">¶</a></h2>
+<p>Next to the card reader sits the CSR1010, a small Bluetooth LE chip with its own antenna. It sends an iBeacon, probably so Condeco's phone app can tell which room it's in. For me that's interesting the other way round: the Home Assistant app on my phone can report which screen is closest, so each screen can mark a room.</p>
+<p>It works like the LED and the card reader: a Condeco system service, <code>conblesys</code>, passes commands to a daemon (<code>blemgr</code>), which talks to the chip over a serial port. The commands are in a Condeco library in the system:</p>
+<table>
+<thead>
+<tr>
+<th>Transaction</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>stop advertising</td>
+</tr>
+<tr>
+<td>2</td>
+<td>start advertising</td>
+</tr>
+<tr>
+<td>3</td>
+<td>set major</td>
+</tr>
+<tr>
+<td>4</td>
+<td>set minor</td>
+</tr>
+<tr>
+<td>5</td>
+<td>set UUID (32 hex digits)</td>
+</tr>
+</tbody>
+</table>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-17-1">adb<span class="w"> </span>shell<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>conblesys<span class="w"> </span><span class="m">5</span><span class="w"> </span>s16<span class="w"> </span>E2C56DB5DFFB48D2B060D0F5A71096E0
+</span><span id="__span-17-2">adb<span class="w"> </span>shell<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>conblesys<span class="w"> </span><span class="m">3</span><span class="w"> </span>s16<span class="w"> </span><span class="m">0001</span>
+</span><span id="__span-17-3">adb<span class="w"> </span>shell<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>conblesys<span class="w"> </span><span class="m">4</span><span class="w"> </span>s16<span class="w"> </span><span class="m">0002</span>
+</span><span id="__span-17-4">adb<span class="w"> </span>shell<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>conblesys<span class="w"> </span><span class="m">2</span>
+</span></code></pre></div>
+<p>The first try with major <code>1</code> was rejected, the log said <code>character &lt; 4</code>: major and minor need exactly four characters. And they're hex: <code>0010</code> showed up in the phone as minor 16. With that, nRF Connect on my phone showed the beacon with exactly these values, about 2 m away.</p>
+<p>After a reboot the chip forgets everything. It doesn't send at all, and a start without new values sends its factory values (an example UUID from CSR, major 3301, minor 0). So the background process sets UUID, major and minor every time it starts. The beacon is off by default, and every screen gets its own random UUID at the first start.</p>
+<h2 id="everything-in-home-assistant">Everything in Home Assistant<a class="headerlink" href="#everything-in-home-assistant" title="Permanent link">¶</a></h2>
+<p>The device "Room Screen <serial>" now has:</serial></p>
+<ul>
+<li><strong>Status LED</strong>: light with colour and brightness</li>
+<li><strong>Last card</strong>: sensor with the card ID, and the time of the tap as attribute, so tapping the same card again triggers too</li>
+<li><strong>Card type ISO 14443A (Mifare) / ISO 15693 / HID iClass / HID Prox</strong>: configuration switches</li>
+<li><strong>Screen</strong> and <strong>Wake screen on touch</strong>: switches</li>
+<li><strong>Screen brightness</strong>: slider from 1 to 100 %</li>
+<li><strong>Bluetooth beacon</strong>: switch, plus <strong>Beacon UUID</strong>, <strong>Beacon major</strong> and <strong>Beacon minor</strong> as configuration entities</li>
+</ul>
+<p>On the tablet, the app has the same controls, the MQTT settings and a dark mode.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The app now, with the last card, &quot;Screen off&quot; and a dark mode" src="../../../../condeco-room-screen/images/claude-led-app-dark.png"></a></p>
+<h2 id="when-the-network-is-the-problem">When the network is the problem<a class="headerlink" href="#when-the-network-is-the-problem" title="Permanent link">¶</a></h2>
+<p>After flashing the second tablet permanently, it stayed black for a long time on PoE. With the 12 V power supply the picture came after about 10 seconds, and after that it started on PoE in about 5 seconds as well. I still don't know what that was, but it's working properly now.</p>
+<p>The next problem: in Home Assistant everything from that tablet was "unavailable" every few minutes. The MQTT connection dropped about every 90 seconds. Data was stuck in the send queue of the open connections (<code>/proc/net/tcp6</code>), and the kernel said:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1">eth0: Link is Up - 1Gbps/Full - flow control off
+</span></code></pre></div>
+<p>Small packets went through, bigger ones got stuck. The i.MX6's Ethernet is known for not really managing gigabit speed. I set the switch port to <strong>100 Mbit</strong>, and since then it's stable. For a dashboard that's more than enough, but not every switch has this setting. However on a later test, this was another problem that suddenly went away by itself and now it runs at 1 Gbit/s without problems (at least for now).</p>
+<h2 id="a-real-fullscreen-dashboard">A real fullscreen dashboard<a class="headerlink" href="#a-real-fullscreen-dashboard" title="Permanent link">¶</a></h2>
+<p>The last thing that bugged me was the dashboard itself. Cromite showed it with the address bar, and because the autostart opened the URL in Cromite, every boot added a new tab.</p>
+<h3 id="what-didnt-work">What didn't work<a class="headerlink" href="#what-didnt-work" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>Home Assistant as a web app on the home screen</strong>, which would run in fullscreen. I tried that idea but Cromite says "This app cannot be installed" and only creates a shortcut to the normal browser.</li>
+<li><strong>Fully Kiosk Browser</strong> by default does real fullscreen, but it uses Android's system WebView, and the one in this firmware is version 58 from 2017. The Home Assistant frontend doesn't run on that.</li>
+<li><strong>Fullscreen through remote debugging:</strong> with the connection from above, a bit of JavaScript was run in the page with the flag <code>userGesture: true</code>. Browsers only allow fullscreen after a tap, and that flag pretends there was one. It worked, but only from the PC: SELinux doesn't let the background process on the tablet connect to the browser.</li>
+<li><strong>A tap from the shell:</strong> <code>input tap</code> counts as a real tap for the browser, so a script could tap a hidden button after every boot. That would work, but it felt like a hack.</li>
+</ul>
+<h3 id="the-webview-is-signed-with-a-public-key">The WebView is signed with a public key<a class="headerlink" href="#the-webview-is-signed-with-a-public-key" title="Permanent link">¶</a></h3>
+<p>Next up was the WebView itself. A system app can be updated with a newer version, as long as the new APK is signed with the same key. Condeco signed its own system parts with its own key. The WebView, however, is signed with the <strong>NXP test key</strong> from the i.MX Android BSP: its certificate fingerprint is the one of <code>testkey.x509.pem</code> in NXP's device repository, and the private key <code>testkey.pk8</code> sits right next to it, publicly on GitHub. Apparently nobody re-signed the WebView when the firmware was built.</p>
+<p>So a current WebView, re-signed with that key, installs as a normal update. It has to be the package <code>com.android.webview</code> (the only WebView this firmware accepts), 32-bit ARM, and run on Android 8. Chromium 138 is the last version for Android 8, 139 needs Android 10. LineageOS builds exactly that and keeps the prebuilt APKs in a public repository, version 138.0.7204.63 has the right package name and <code>minSdk 26</code>. Re-signing is one command with <code>apksigner</code> from the Android SDK:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1">apksigner<span class="w"> </span>sign<span class="w"> </span>--key<span class="w"> </span>testkey.pk8<span class="w"> </span>--cert<span class="w"> </span>testkey.x509.pem<span class="w"> </span>--min-sdk-version<span class="w"> </span><span class="m">26</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-19-2"><span class="w">    </span>--out<span class="w"> </span>webview.apk<span class="w"> </span>webview-lineage.apk
+</span><span id="__span-19-3">adb<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>webview.apk
+</span><span id="__span-19-4">adb<span class="w"> </span>shell<span class="w"> </span>dumpsys<span class="w"> </span>webviewupdate
+</span><span id="__span-19-5"><span class="c1"># Current WebView package (name, version): (com.android.webview, 138.0.7204.63)</span>
+</span></code></pre></div>
+<p>The old WebView 58 stays in <code>/system</code>. <code>adb uninstall com.android.webview</code> removes only the update and brings it back.</p>
+<h3 id="fully-kiosk-now-with-a-current-engine">Fully Kiosk, now with a current engine<a class="headerlink" href="#fully-kiosk-now-with-a-current-engine" title="Permanent link">¶</a></h3>
+<p>With the new WebView, Fully Kiosk Browser 1.61.4 runs the dashboard in real fullscreen, no address bar, no tabs. Its first start asks for the start URL, then I logged in to Home Assistant on the tablet. The first load took about 70 seconds, the dual-core i.MX6 is really busy with the Home Assistant frontend. After that it's fine for displaying things, but expect a ~5-10s screen update delay when tapping something.</p>
+<p>Switching the screen off still works with Fully. After switching on, the page is white for about 2 seconds and then the dashboard is back with fresh values: the WebView loses its graphics context when Fully is hidden behind the black page for more than a few seconds. Once, the very first time, Fully loaded the whole dashboard again, which took about 45 seconds. That didn't happen again.</p>
+<p>The <a href="https://github.com/NemesisRE/kiosk-mode" target="_blank" rel="noopener">kiosk-mode</a> plugin I already use hides Home Assistant's header and sidebar. It can't make the browser fullscreen, though, so it doesn't replace Fully, it goes on top.</p>
+<p>Next on my list is the autostart: instead of a URL in Cromite, the boot image will just start Fully.</p>
+<p>That's how the screens run now. One tablet stays on my desk with the serial console attached, for experiments that don't go into the setup, like root. That's <a href="part-3.md">Part 3</a>.</p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 18, 2026 18:45:06 UTC"><span class="timeago" datetime="2026-11-18T18:45:06+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 18, 2026 18:45:06 UTC">2026-11-18</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Created">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 18, 2026 18:42:10 UTC"><span class="timeago" datetime="2026-11-18T18:42:10+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 18, 2026 18:42:10 UTC">2026-11-18</span>
+  </span>
+
+    
+    
+    
+  </aside>
+
+
+
+  
+
+
+<!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+<h2 id="__comments">Comments</h2>
+<!-- Insert generated snippet here -->
+<script src="https://giscus.app/client.js" data-repo="Xitee1/xitee-docs" data-repo-id="R_kgDOOYkrEQ" data-category="Comments" data-category-id="DIC_kwDOOYkrEc4CwlOg" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="en" data-loading="lazy" crossorigin="anonymous" async=""></script>
+
+<!-- Synchronize Giscus theme with palette -->
+<script>
+  var giscus = document.querySelector("script[src*=giscus]");
+
+  // Set palette on initial load
+  var palette = __md_get("__palette");
+  if (palette && typeof palette.color === "object") {
+    var theme = palette.color.scheme === "slate" ? "transparent_dark" : "light";
+
+    // Instruct Giscus to set theme
+    giscus.setAttribute("data-theme", theme);
+  }
+
+  // Register event handlers after documented loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    var ref = document.querySelector("[data-md-component=palette]");
+    ref.addEventListener("change", function () {
+      var palette = __md_get("__palette");
+      if (palette && typeof palette.color === "object") {
+        var theme =
+          palette.color.scheme === "slate" ? "transparent_dark" : "light";
+
+        // Instruct Giscus to change theme
+        var frame = document.querySelector(".giscus-frame");
+        frame.contentWindow.postMessage(
+          { giscus: { setConfig: { theme } } },
+          "https://giscus.app"
+        );
+      }
+    });
+  });
+</script>
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["search.highlight", "navigation.tabs", "content.code.copy"], "search": "../../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../../../../js/timeago.min.js"></script>
+      
+        <script src="../../../../../js/timeago_mkdocs_material.js"></script>
+      
+    
+  
+<script id="init-glightbox">document.querySelectorAll('.glightbox').forEach(function(element) {
+    try {
+        var img = element.querySelector('img');
+        if (img) {
+            const imageSrc = img.dataset.src || img.src;
+            if (imageSrc) {
+                element.setAttribute('href', imageSrc);
+            } else {
+                console.log('No img element with src or data-src attribute found');
+            }
+        } else {
+            console.log('No img element found');
+        }
+    } catch (error) {
+        console.log('Error:', error);
+    }
+});
+const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>
