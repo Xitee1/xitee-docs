@@ -44,7 +44,7 @@ hide:
 
 ## The server
 
-Xite SMP is a plain survival server without a big concept. Just go find yourself a spot, build and do whatever you like. The community has always been small and friendly. People build next to each other instead of hiding far apart, as you'd usually do for fear of griefing. There are no plots either.
+Xite SMP is a plain survival server without a big concept. Just go find yourself a spot, build and do whatever you like. The community has always been small and friendly. It's mostly German-speaking, but English speakers are just as welcome. People build next to each other instead of hiding far apart, as you'd usually do for fear of griefing. There are no plots either.
 
 The rules are simple: Be nice, don't be a dick. Apart from cheating (X-ray included) or hacking, do whatever you want, as long all participants are fine with it.
 
