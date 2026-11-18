@@ -1,7 +1,8 @@
 ---
 date:
   created: 2026-11-13
-draft: true
+draft: false
+cover: images/cover-part-2.png
 description: Setting up more Condeco V2 room screens without soldering, and taking control of the hardware - USB-only access with a patched U-Boot, touch that follows the rotation, navigation buttons, the RGB status LED, the card reader, switching the screen off, a Bluetooth beacon and finally a real fullscreen dashboard.
 ---
 
