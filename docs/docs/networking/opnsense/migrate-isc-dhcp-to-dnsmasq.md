@@ -332,7 +332,7 @@ Side effect you will probably notice: reconnects are a lot faster. ISC syncs its
 - **Network boot**: Dnsmasq has the PXE options in the GUI (*DHCP boot*, *DHCP tags*). A TFTP server next to it is enough, no second DHCP server needed.
 
 ## Sources
-- [OPNsense docs: Dnsmasq DNS & DHCP](https://docs.opnsense.org/manual/dnsmasq.html){:target="_blank"}
-- [opnsense/core #9155: Move ISC DHCP to plugins](https://github.com/opnsense/core/issues/9155){:target="_blank"}
-- [Home Network Guy: Migrate from ISC DHCP to dnsmasq or Kea](https://homenetworkguy.com/how-to/migrate-from-isc-dhcp-to-dnsmasq-or-kea-dhcp-in-opnsense/){:target="_blank"}
-- [dnsmasq-discuss: why addresses are allocated by MAC hash](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2010q2/003884.html){:target="_blank"}
+- [OPNsense docs: Dnsmasq DNS & DHCP](https://docs.opnsense.org/manual/dnsmasq.html)
+- [opnsense/core #9155: Move ISC DHCP to plugins](https://github.com/opnsense/core/issues/9155)
+- [Home Network Guy: Migrate from ISC DHCP to dnsmasq or Kea](https://homenetworkguy.com/how-to/migrate-from-isc-dhcp-to-dnsmasq-or-kea-dhcp-in-opnsense/)
+- [dnsmasq-discuss: why addresses are allocated by MAC hash](https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2010q2/003884.html)

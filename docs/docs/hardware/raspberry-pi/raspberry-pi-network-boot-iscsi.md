@@ -942,14 +942,14 @@ A new Pi has a new serial number and a new MAC address. The iSCSI disk, target a
     The EEPROM setting `TFTP_PREFIX` can make the firmware use a fixed string or the MAC address instead of the serial number as folder name. The symlink works the same way for every model, so this guide sticks with it.
 
 ## Sources
-- [Raspberry Pi blog: Pi 3 booting part I (OTP, boot modes)](https://www.raspberrypi.com/news/pi-3-booting-part-i-usb-mass-storage-boot/){:target="_blank"}
-- [Raspberry Pi docs (fork): Network boot on the Pi 3](https://github.com/naushir/documentation/blob/master/hardware/raspberrypi/bootmodes/net.md){:target="_blank"}
-- [nobodd: Netboot on the Pi](https://nobodd.readthedocs.io/en/latest/explain-pi-netboot.html){:target="_blank"}
-- [openSUSE: netboot-rpi3b (DHCP options)](https://github.com/openSUSE/netboot-rpi3b){:target="_blank"}
-- [Warmest Robot: Raspberry Pi Network Boot Guide 2.0](https://warmestrobot.com/blog/2024/06/27/raspberry-pi-network-boot-guide-2/){:target="_blank"}
-- [zenn.dev: Raspberry Pi 4B PXE + iSCSI network boot](https://zenn.dev/korosuke613/articles/raspberry-pi-pxe-iscsi-boot?locale=en){:target="_blank"}
-- [Debian Wiki: SAN/iSCSI/LIO](https://wiki.debian.org/SAN/iSCSI/LIO){:target="_blank"}
-- [Red Hat: iSCSI root timeouts](https://docs.redhat.com/en/documentation/Red_Hat_Enterprise_Linux/6/html/storage_administration_guide/iscsi-root){:target="_blank"}
-- [RFC 3721: iSCSI naming](https://datatracker.ietf.org/doc/rfc3721){:target="_blank"}
-- [rpi-swap: swap.conf reference](https://deepwiki.com/raspberrypi/rpi-swap/3.1-swap.conf-reference){:target="_blank"}
-- [OPNsense docs: Dnsmasq DNS & DHCP](https://docs.opnsense.org/manual/dnsmasq.html){:target="_blank"}
+- [Raspberry Pi blog: Pi 3 booting part I (OTP, boot modes)](https://www.raspberrypi.com/news/pi-3-booting-part-i-usb-mass-storage-boot/)
+- [Raspberry Pi docs (fork): Network boot on the Pi 3](https://github.com/naushir/documentation/blob/master/hardware/raspberrypi/bootmodes/net.md)
+- [nobodd: Netboot on the Pi](https://nobodd.readthedocs.io/en/latest/explain-pi-netboot.html)
+- [openSUSE: netboot-rpi3b (DHCP options)](https://github.com/openSUSE/netboot-rpi3b)
+- [Warmest Robot: Raspberry Pi Network Boot Guide 2.0](https://warmestrobot.com/blog/2024/06/27/raspberry-pi-network-boot-guide-2/)
+- [zenn.dev: Raspberry Pi 4B PXE + iSCSI network boot](https://zenn.dev/korosuke613/articles/raspberry-pi-pxe-iscsi-boot?locale=en)
+- [Debian Wiki: SAN/iSCSI/LIO](https://wiki.debian.org/SAN/iSCSI/LIO)
+- [Red Hat: iSCSI root timeouts](https://docs.redhat.com/en/documentation/Red_Hat_Enterprise_Linux/6/html/storage_administration_guide/iscsi-root)
+- [RFC 3721: iSCSI naming](https://datatracker.ietf.org/doc/rfc3721)
+- [rpi-swap: swap.conf reference](https://deepwiki.com/raspberrypi/rpi-swap/3.1-swap.conf-reference)
+- [OPNsense docs: Dnsmasq DNS & DHCP](https://docs.opnsense.org/manual/dnsmasq.html)

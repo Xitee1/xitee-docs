@@ -56,10 +56,12 @@ repo_name: Xitee1/xitee-docs
 
 plugins:
   - search
-  # - privacy:
-  #     external_assets_exclude: 
-  #       - cdn.jsdelivr.net/npm/mathjax@3/* 
-  #       - giscus.app/*
+  # Only used to open external links in a new tab (with rel="noopener");
+  # external assets are not downloaded
+  - privacy:
+      assets: false
+      links_attr_map:
+        target: _blank
   - blog
   - meta
   - awesome-nav

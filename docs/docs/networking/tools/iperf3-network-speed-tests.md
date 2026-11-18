@@ -104,4 +104,4 @@ Enable it so that it automatically start back up on reboot:
 systemctl enable iperf3
 ```
 
-Inspired by: [https://askubuntu.com/questions/1251443/start-iperf3-deamon-at-startup](https://askubuntu.com/a/1251448){:target="_blank"}
+Inspired by: [https://askubuntu.com/questions/1251443/start-iperf3-deamon-at-startup](https://askubuntu.com/a/1251448)
