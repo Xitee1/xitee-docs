@@ -45,6 +45,7 @@ hide:
 ## The server
 
 Xite SMP is a plain survival server without a big concept. Just go find yourself a spot, build and do whatever you like. The community has always been small and friendly. People build next to each other instead of hiding far apart, as you'd usually do for fear of griefing. There are no plots either.
+
 The rules are simple: Be nice, don't be a dick. Apart from cheating (X-ray included) or hacking, do whatever you want, as long all participants are fine with it.
 
 The server is public and there's no whitelist, so anyone can join. New players start with limited permissions, though, and can only walk around at first. If you want to build, you have to ask for permissions on the Discord server. From there, a trust level system unlocks more permissions over time.
