@@ -451,3 +451,174 @@
   height: 0.55rem;
   border-radius: 50%;
 }
+
+/* Minecraft server: status box on the Minecraft page, card on the home page.
+   State, players and version are filled in by javascripts/mc-status.js */
+
+[data-md-color-scheme="default"] {
+  --mc-online-color: #15803d;
+  --mc-offline-color: #b91c1c;
+}
+
+[data-md-color-scheme="slate"] {
+  --mc-online-color: #4ade80;
+  --mc-offline-color: #f87171;
+}
+
+/* Minecraft page: heading and intro on the left, status box on the right.
+   Below 40rem content width the box moves under the intro. */
+
+.mc-intro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem 2rem;
+  margin-bottom: 1.5em;
+}
+
+.mc-intro__text {
+  flex: 1 1 18rem;
+  min-width: 0;
+}
+
+.md-typeset .mc-intro__text p:last-child {
+  margin-bottom: 0;
+}
+
+.md-typeset .mc-intro .mc-status {
+  flex: 0 1 20rem;
+  margin: 0.5rem 0 0;
+}
+
+.md-typeset .mc-status {
+  max-width: 20rem;
+  margin: 1.5em 0;
+  border-radius: var(--radius);
+  background-color: var(--surface-color);
+  font-size: 0.7rem;
+  overflow: hidden;
+}
+
+.mc-status__header {
+  padding: 0.4rem 0.75rem;
+  background: var(--header-gradient);
+  color: #ffffff;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.md-typeset .mc-status__rows {
+  margin: 0;
+}
+
+.md-typeset .mc-status__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
+}
+
+.md-typeset .mc-status__row + .mc-status__row {
+  border-top: 1px dashed var(--md-default-fg-color--lightest);
+}
+
+.md-typeset .mc-status__row dt {
+  font-weight: 400;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .mc-status__row dd {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0;
+  font-family: var(--md-code-font-family);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.md-typeset .mc-status__state {
+  color: var(--md-default-fg-color--light);
+}
+
+[data-mc-state="online"] .mc-status__state {
+  color: var(--mc-online-color);
+}
+
+[data-mc-state="offline"] .mc-status__state {
+  color: var(--mc-offline-color);
+}
+
+.mc-status__copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-right: -0.2rem;
+  border-radius: var(--radius);
+  color: var(--md-default-fg-color--light);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.mc-status__copy:hover,
+.mc-status__copy:focus-visible {
+  color: var(--md-accent-fg-color);
+  background-color: var(--md-accent-fg-color--transparent);
+}
+
+.mc-status__copy svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  fill: currentColor;
+}
+
+.mc-status__done-icon,
+.mc-status__copy--done .mc-status__copy-icon {
+  display: none;
+}
+
+.mc-status__copy--done .mc-status__done-icon {
+  display: block;
+}
+
+.mc-status__copy.mc-status__copy--done {
+  color: var(--mc-online-color);
+}
+
+.mc-status__footer {
+  padding: 0.4rem 0.75rem;
+  border-top: 1px dashed var(--md-default-fg-color--lightest);
+  font-size: 0.55rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.mc-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.mc-state__dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background-color: var(--md-default-fg-color--lighter);
+}
+
+[data-mc-state="online"] .mc-state__dot {
+  background-color: var(--mc-online-color);
+}
+
+[data-mc-state="offline"] .mc-state__dot {
+  background-color: var(--mc-offline-color);
+}
+
+.mc-card:not([data-mc-state="online"]) .mc-card__players {
+  display: none;
+}

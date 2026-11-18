@@ -1,0 +1,8 @@
+{#- Minecraft server page: the status box in the page content is filled by
+    javascripts/mc-status.js -#}
+{% extends "main.html" %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src="{{ 'javascripts/mc-status.js' | url }}"></script>
+{% endblock %}

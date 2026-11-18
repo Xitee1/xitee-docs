@@ -1,4 +1,4 @@
-{#- Home page: intro, latest posts, docs categories, GitHub projects.
+{#- Home page: intro, latest posts, docs categories, GitHub projects, Minecraft server.
     Data comes from hooks/home.py -#}
 {% extends "main.html" %}
 {% block content %}
@@ -81,6 +81,27 @@
       </div>
     </section>
   {% endif %}
+
+  <section class="home-section">
+    <div class="home-section__header">
+      <h2>Minecraft server</h2>
+    </div>
+    <div class="home-grid home-grid--projects">
+      {#- State and players are filled in by javascripts/mc-status.js -#}
+      <a href="{{ 'minecraft/' | url }}" class="repo-card mc-card" data-mc-status="mc.xitma.de">
+        <span class="repo-card__name">
+          {% include ".icons/material/minecraft.svg" %}
+          <span>Xite SMP</span>
+        </span>
+        <span class="repo-card__text">Small survival server, running since 2020.</span>
+        <span class="repo-card__meta">
+          <span class="mc-state"><span class="mc-state__dot"></span><span data-mc-field="status">–</span></span>
+          <span class="mc-card__players"><span data-mc-field="players">–</span><span>players</span></span>
+          <span>mc.xitma.de</span>
+        </span>
+      </a>
+    </div>
+  </section>
 {% endblock %}
 
 {% block scripts %}
@@ -88,4 +109,5 @@
   {% if projects %}
     <script src="{{ 'javascripts/projects.js' | url }}"></script>
   {% endif %}
+  <script src="{{ 'javascripts/mc-status.js' | url }}"></script>
 {% endblock %}
