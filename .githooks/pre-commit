@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Blocks commits that contain images with GPS location data.
+# Camera data (model, date and so on) is allowed.
+# The staged version of each image is checked, including embedded images
+# such as HDR gain maps.
+#
+# Activate once per clone:
+#   git config core.hooksPath .githooks
+
+set -euo pipefail
+
+patterns=()
+for ext in jpg jpeg png webp gif heic heif avif tif tiff; do
+  patterns+=(":(icase)*.$ext")
+done
+
+mapfile -d '' files < <(git diff --cached --name-only -z --diff-filter=ACMR -- "${patterns[@]}")
+
+if (( ${#files[@]} == 0 )); then
+  exit 0
+fi
+
+if ! command -v exiftool >/dev/null 2>&1; then
+  echo "pre-commit: exiftool not found, images cannot be checked for location data." >&2
+  echo "Install exiftool to commit images." >&2
+  exit 1
+fi
+
+found=()
+for file in "${files[@]}"; do
+  tags=$(git show ":$file" | exiftool -q -q -m -a -ee -s -GPSLatitude -GPSLongitude -GPSCoordinates - || true)
+  if [[ -n "$tags" ]]; then
+    found+=("$file")
+  fi
+done
+
+if (( ${#found[@]} == 0 )); then
+  exit 0
+fi
+
+echo "pre-commit: location data found in ${#found[@]} image(s):" >&2
+printf '  %s\n' "${found[@]}" >&2
+echo "Remove it with: exiftool -gps:all= '-xmp:gps*=' -overwrite_original <file>" >&2
+echo "Then stage it again with: git add <file>" >&2
+exit 1
